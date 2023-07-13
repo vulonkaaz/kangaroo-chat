@@ -5,6 +5,6 @@ BEGIN;
 -- XXX Add DDLs here.
 DROP TABLE "user", "group", "channel", "message", "event", "user_group",
 	"group_channel", "user_channel", "user_message", "user_event",
-	"customization", "group_customization", "invite_key";
+	"customization", "invite_key";
 
 COMMIT;

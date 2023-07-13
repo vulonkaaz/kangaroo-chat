@@ -110,16 +110,7 @@ CREATE TABLE "customization" (
 	"id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 	"user_id" int NOT NULL REFERENCES "user"("id"),
 	"group_id" int REFERENCES "group"("id"),
-	"channel_id" int NOT NULL REFERENCES "channel"("id"),
-	"position" int NOT NULL,
-	"created_at" timestamptz NOT NULL DEFAULT now(),
-	"updated_at" timestamptz
-);
-
-CREATE TABLE "group_customization" (
-	"id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-	"user_id" int NOT NULL REFERENCES "user"("id"),
-	"group_id" int NOT NULL REFERENCES "group"("id"),
+	"channel_id" int REFERENCES "channel"("id"),
 	"position" int NOT NULL,
 	"created_at" timestamptz NOT NULL DEFAULT now(),
 	"updated_at" timestamptz
