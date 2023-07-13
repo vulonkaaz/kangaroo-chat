@@ -57,6 +57,7 @@ CREATE TABLE "message" (
 	"content" text,
 	"attachment" text,
 	"event_id" int REFERENCES "event"("id"),
+	"channel_id" int REFERENCES "channel"("id"),
 	"created_at" timestamptz NOT NULL DEFAULT now(),
 	"updated_at" timestamptz
 );
