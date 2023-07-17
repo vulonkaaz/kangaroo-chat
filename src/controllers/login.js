@@ -21,16 +21,21 @@ exports.login = async function(req, res) {
 }
 
 exports.signup = async function(req, res) {
-	const { email, password, name, fullname } = req.body;
+	try {
+		const { email, password, name, fullname } = req.body;
 
-	if (!email || !password || !name || !fullname) {
-		return res.status(400).send("missing fields");
-	}
-	const hash = await bcrypt.hash(password, 10);
-	const created = await userMapper.create(email, hash, name, fullname);
-	if(!created) {
-		return res.status(500).send("database error");
-	}
+		if (!email || !password || !name || !fullname) {
+			return res.status(400).send("missing fields");
+		}
+		const hash = await bcrypt.hash(password, 10);
+		const created = await userMapper.create(email, hash, name, fullname);
+		if(!created) {
+			return res.status(500).send("database error");
+		}
 
-	res.status(201).json({user:created,token:makeToken({id:created.id})});
+		res.status(201).json({user:created,token:makeToken({id:created.id})});
+	} catch (err) {
+		res.status(500).send("server error");
+		console.log(err);
+	}
 }
