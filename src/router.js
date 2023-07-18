@@ -12,5 +12,6 @@ router.get("/api/user/:id(\\d+)", verify, userCtrl.getProfile);
 router.get("/api/user/me", verify, userCtrl.getMyProfile);
 
 router.post("/api/group", verify, groupCtrl.createGroup);
+router.post("/api/group/:id(\\d+)/join", verify, groupCtrl.joinGroup);
 
 module.exports = router;
