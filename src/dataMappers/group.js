@@ -20,3 +20,23 @@ exports.joinGroup = async function(groupId, userId) {
 	}
 	return await database.query('INSERT INTO "user_group" (user_id, group_id, role) VALUES ($1, $2, 0)', [userId, groupId]);
 }
+
+exports.leaveGroup = async function(groupId, userId) {
+	// we check if the group exist
+	const groupCheck = await database.query('SELECT name FROM "group" WHERE id=$1', [groupId]);
+	if (!groupCheck.rows[0]) {
+		throw new Error('group doesn\'t exist');
+	}
+	//we check if the user is in the group
+	const check = await database.query('SELECT * FROM "user_group" WHERE group_id=$1 AND user_id=$2', [groupId, userId]);
+	if (!check.rows[0]) {
+		throw new Error('user not in group');
+	}
+	if (check.rows[0].role === -1) { // a banned user can't leave (this would unban them)
+		throw new Error('user is banned');
+	}
+	if (check.rows[0].role === 4) { // the creator can't abandon their group
+		throw new Error('user is creator');
+	}
+	return await database.query('DELETE FROM "user_group" WHERE group_id=$1 AND user_id=$2', [groupId, userId]);
+}
