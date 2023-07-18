@@ -1,0 +1,213 @@
+#+TITLE: dictionnaire des données de l'application Kangaro'O
+#+AUTHOR: Brice Tonon
+#+OPTIONS: ^:nil
+
+
+* table user
+
+| nom           | type        | contraintes                              | description                                                      |
+|---------------+-------------+------------------------------------------+------------------------------------------------------------------|
+| id            | int         | GENERATED ALWAYS AS IDENTITY PRIMARY KEY | id                                                               |
+| email         | text        | NOT NULL UNIQUE                          | email de login, unique et peut servir à identifier l'utilisateur |
+| pass          | text        | NOT NULL                                 | mot de passe, doit être haché                                    |
+| name          | text        | NOT NULL UNIQUE                          | nom d'utilisateur, mentionnable dans le tchat                    |
+| full_name     | text        | NOT NULL                                 | nom d'affichage                                                  |
+| picture       | text        |                                          | photo de profil (nom du fichier dans le dossier media)           |
+| phone         | text        |                                          | numéro de téléphone                                              |
+| title         | text        |                                          | titre/occupation de l'utilisateur à afficher sur le profil       |
+| position      | text        |                                          | poste de l'utilisateur dans l'entreprise                         |
+| department    | text        |                                          | service dans lequel l'utilisateur travaille                      |
+| status        | text        |                                          | status de l'utilisateur                                          |
+| location      | text        |                                          | localisation à afficher                                          |
+| website       | text        |                                          | site web de l'utilisateur à afficher sur le profil               |
+| contact_email | text        |                                          | email à afficher sur le profil de l'utilisateur                  |
+| created_at    | timestamptz | NOT NULL DEFAULT now()                   | date/heure de création                                           |
+| updated_at    | timestamptz |                                          | date/heure de mise à jour                                        |
+
+
+* table group
+
+| nom        | type        | contraintes                              | description                                            |
+|------------+-------------+------------------------------------------+--------------------------------------------------------|
+| id         | int         | GENERATED ALWAYS AS IDENTITY PRIMARY KEY | id                                                     |
+| name       | text        | NOT NULL UNIQUE                          | nom du groupe                                          |
+| logo       | text        |                                          | logo du groupe (nom du ficher dans dossier media)      |
+| private    | bool        | NOT NULL DEFAULT false                   | true: le groupe est privé, false: le groupe est public |
+| visible    | bool        | NOT NULL DEFAULT true                    | true: apparaît dans les recherche                      |
+| created_at | timestamptz | NOT NULL DEFAULT now()                   | date/heure de création                                 |
+| updated_at | timestamptz |                                          | date/heure de mise à jour                              |
+
+
+* table channel
+
+| nom        | type        | contraintes                              | description                                       |
+|------------+-------------+------------------------------------------+---------------------------------------------------|
+| id         | int         | GENERATED ALWAYS AS IDENTITY PRIMARY KEY | id                                                |
+| name       | text        | NOT NULL                                 | nom du canal, doit être unique dans chaque groupe |
+| type       | smallint    | NOT NULL DEFAULT 0                       | 0: canal public, 1: canal privé, 2: message privé |
+| position   | int         | NOT NULL                                 | position du canal par défaut dans l'interface     |
+| created_at | timestamptz | NOT NULL DEFAULT now()                   | date/heure de création                            |
+| updated_at | timestamptz |                                          | date/heure de mise à jour                         |
+
+** type de channel
+
+si le type est à 0 il s'agit d'un canal public, il doit obligatoirement être lié à au moins un groupe, lier des utilisateurs à ce type de canal n'aura aucun effet
+
+si le type est à 1 il s'agit d'un canal privé, il doit obligatoirement être  lié à au moins un groupe, les utilisateurs lié au canal pourront le voir les autres non
+
+si le type est à 2 il s'agit d'un canal de discution privée entre deux utilisateurs, il ne peut pas être lié à un groupe et doit obligatoirement être lié à deux utilisateurs
+
+si le type est à 3 il s'agit d'un canal de discution privée entre plusieurs utilisateurs, il n'est pas lié à un groupe et doit être lié à plusieurs utilisateurs
+
+
+* table message
+
+| nom        | type        | contraintes                              | description                                         |
+|------------+-------------+------------------------------------------+-----------------------------------------------------|
+| id         | int         | GENERATED ALWAYS AS IDENTITY PRIMARY KEY | id                                                  |
+| sender_id  | int         | NOT NULL REFERENCES "user"("id")         | id de l'auteur du message                           |
+| content    | text        |                                          | contenu du message                                  |
+| attachment | text        |                                          | pièce jointe (nom du fichier dans le dossier media) |
+| event_id   | int         | REFERENCES "event"("id")                 | id de l'évènement                                   |
+| channel_id | int         | NOT NULL REFERENCES "channel"("id")      | canal dans lequel le message est posté              |
+| created_at | timestamptz | NOT NULL DEFAULT now()                   | date/heure de création                              |
+| updated_at | timestamptz |                                          | date/heure de mise à jour                           |
+
+
+* table event
+
+| nom        | type        | contraintes                              | description                |
+|------------+-------------+------------------------------------------+----------------------------|
+| id         | int         | GENERATED ALWAYS AS IDENTITY PRIMARY KEY | id                         |
+| name       | text        | NOT NULL                                 | titre de l'évènement       |
+| desc       | text        |                                          | description de l'évènement |
+| begin      | timestamptz | NOT NULL                                 | date/heure de début        |
+| end        | timestamptz |                                          | date/heure de fin          |
+| created_at | timestamptz | NOT NULL DEFAULT now()                   | date/heure de création     |
+| updated_at | timestamptz |                                          | date/heure de mise à jour  |
+
+
+* table user_group
+
+| nom        | type        | contraintes                              | description                          |
+|------------+-------------+------------------------------------------+--------------------------------------|
+| id         | int         | GENERATED ALWAYS AS IDENTITY PRIMARY KEY | id                                   |
+| user_id    | int         | NOT NULL REFERENCES "user"("id")         | id de l'utilisateur                  |
+| group_id   | int         | NOT NULL REFERENCES "group"("id")        | id du groupe                         |
+| role       | smallint    | NOT NULL DEFAULT 0                       | role de l'utilisateur dans le groupe |
+| created_at | timestamptz | NOT NULL DEFAULT now()                   | date/heure de création               |
+| updated_at | timestamptz |                                          | date/heure de mise à jour            |
+
+** role
+
+| valeur | signification                                                                                  |
+|--------+------------------------------------------------------------------------------------------------|
+|      0 | l'utilisateur n'a pas de droit spéciaux                                                        |
+|      1 | l'utilisateur est modérateur, il peut kick, bannir, supprimer des messages                     |
+|      2 | l'utilisateur est administrateur, il peut créer et modifier des canaux                         |
+|      3 | l'utilisateur est super admin, il peut modifier le logo du groupe et le passer en public/privé |
+|      4 | l'utilisateur est le créateur du groupe, il est le seul à pouvoir le supprimer                 |
+|     -1 | l'utilisateur est banni                                                                        |
+
+
+* table group_channel
+
+| nom        | type        | contraintes                              | description                                                                                |
+|------------+-------------+------------------------------------------+--------------------------------------------------------------------------------------------|
+| id         | int         | GENERATED ALWAYS AS IDENTITY PRIMARY KEY | id                                                                                         |
+| group_id   | int         | NOT NULL REFERENCES "group"("id")        | id du groupe                                                                               |
+| channel_id | int         | NOT NULL REFERENCES "channel"("id")      | id du canal                                                                                |
+| main       | bool        | NOT NULL DEFAULT true                    | true: il s'agit du groupe d'origine du canal, false: le canal a été partagé avec ce groupe |
+| created_at | timestamptz | NOT NULL DEFAULT now()                   | date/heure de création                                                                     |
+| updated_at | timestamptz |                                          | date/heure de mise à jour                                                                  |
+
+
+* table user_channel
+
+| nom        | type        | contraintes                              | description               |
+|------------+-------------+------------------------------------------+---------------------------|
+| id         | int         | GENERATED ALWAYS AS IDENTITY PRIMARY KEY | id                        |
+| user_id    | int         | NOT NULL REFERENCES "user"("id")         | id de l'utilisateur       |
+| channel_id | int         | NOT NULL REFERENCES "channel"("id")      | id du canal               |
+| created_at | timestamptz | NOT NULL DEFAULT now()                   | date/heure de création    |
+| updated_at | timestamptz |                                          | date/heure de mise à jour |
+
+
+* table user_message
+
+| nom        | type        | contraintes                              | description                              |
+|------------+-------------+------------------------------------------+------------------------------------------|
+| id         | int         | GENERATED ALWAYS AS IDENTITY PRIMARY KEY | id                                       |
+| user_id    | int         | NOT NULL REFERENCES "user"("id")         | id de l'utilisateur                      |
+| message_id | int         | NOT NULL REFERENCES "message"("id")      | id du message                            |
+| notify     | bool        | NOT NULL DEFAULT false                   | true si le message notifie l'utilisateur |
+| read       | bool        | NOT NULL DEFAULT false                   | true si l'utilisateur a lu le message    |
+| created_at | timestamptz | NOT NULL DEFAULT now()                   | date/heure de création                   |
+| updated_at | timestamptz |                                          | date/heure de mise à jour                |
+
+
+* table user_event
+
+| nom        | type        | contraintes                              | description                                          |
+|------------+-------------+------------------------------------------+------------------------------------------------------|
+| id         | int         | GENERATED ALWAYS AS IDENTITY PRIMARY KEY | id                                                   |
+| user_id    | int         | NOT NULL REFERENCES "user"("id")         | id de l'utilisateur                                  |
+| event_id   | int         | NOT NULL REFERENCES "event"("id")        | id de l'évènement                                    |
+| creator    | bool        | NOT NULL DEFAULT false                   | true si l'utilisateur est le créateur de l'évènement |
+| created_at | timestamptz | NOT NULL DEFAULT now()                   | date/heure de création                               |
+| updated_at | timestamptz |                                          | date/heure de mise à jour                            |
+
+
+* table customization
+
+| nom        | type        | contraintes                              | description                        |
+|------------+-------------+------------------------------------------+------------------------------------|
+| id         | int         | GENERATED ALWAYS AS IDENTITY PRIMARY KEY | id                                 |
+| user_id    | int         | NOT NULL REFERENCES "user"("id")         | id de l'utilisateur                |
+| group_id   | int         | REFERENCES "group"("id")                 | id du groupe                       |
+| channel_id | int         | REFERENCES "channel"("id")               | id du canal                        |
+| position   | int         | NOT NULL                                 | position du canal dans l'interface |
+| created_at | timestamptz | NOT NULL DEFAULT now()                   | date/heure de création             |
+| updated_at | timestamptz |                                          | date/heure de mise à jour          |
+
+** explications
+
+cette table permet à l'utilisateur de personnaliser l'ordre dans lequel les canaux apparaissent dans les groupes, elle permet également de mettre des canaux en favoris dans la page d'accueil
+
+si group_id est défini, l'élément définit le placement des canaux dans le groupe
+
+si group_id n'est pas défini, le canal est mis en favoris
+
+si channel_id n'est pas défini, l'élement définit la position du groupe dans la barre de gauche
+
+exemple :
+affichage chez u1:
+| accueil | grp1 | grp2 |
+|---------+------+------|
+| #z      | #a   | #t   |
+| #g      | #e   | #k   |
+|         | #g   | #z   |
+
+dans la BDD:
+| user | group | canal | position |
+|------+-------+-------+----------|
+| u1   |       | #z    |        0 |
+| u1   |       | #g    |        1 |
+| u1   | grp1  | #a    |        0 |
+| u1   | grp1  | #e    |        1 |
+| u1   | grp1  | #g    |        2 |
+| u1   | grp2  | #t    |        0 |
+| u1   | grp2  | #k    |        1 |
+| u1   | grp2  | #z    |        2 |
+| u1   | grp1  |       |        0 |
+| u1   | grp2  |       |        1 |
+
+
+* table invite_key
+
+| nom       | type | contraintes                              | description                                         |
+|-----------+------+------------------------------------------+-----------------------------------------------------|
+| id        | int  | GENERATED ALWAYS AS IDENTITY PRIMARY KEY | id                                                  |
+| issuer_id | int  | NOT NULL REFERENCES "user"("id")         | id de l'admin qui a créé la clé                     |
+| user_id   | int  | REFERENCES "user"("id")                  | id de l'utilisateur créé                            |
+| key       | text | NOT NULL UNIQUE                          | clé unique (longue chaîne de caractères aléatoires) |

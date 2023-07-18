@@ -1,0 +1,128 @@
+#+TITLE: référence API Kangaro'O
+#+AUTHOR: Brice Tonon
+#+OPTIONS: ^:nil
+
+* Authentification
+
+** login
+
+~POST /api/login~
+
+Contenu attendu:
+#+begin_src js
+{
+	"email":"email utilisateur",
+	"password":"mot de passe"
+}
+#+end_src
+
+Réponses possibles:
+| code | réponse                   |
+|------+---------------------------|
+|  401 | 'invalid email or passwd' |
+|  200 | {"token":"token JWT"}     |
+
+** inscription
+
+~POST /api/signup~
+
+Contenu attendu:
+#+begin_src js
+{
+	"email":"email utilisateur",
+	"password":"mot de passe",
+	"name": "nom d'utilisateur",
+	"fullname": "nom complet"
+}
+#+end_src
+
+Réponses possibles:
+| code | réponse                                           |
+|------+---------------------------------------------------|
+|  400 | 'missing fields'                                  |
+|  201 | {"user":{utilisateur créé}, "token": "token JWT"} |
+
+* profils utilisateur
+
+** récupérer un profil
+
+~GET /api/user/:id~
+
+Réponses possibles:
+| code | réponse          |
+|------+------------------|
+|  404 | 'user not found' |
+|  200 | {utilisateur}    |
+
+** récupérer son propre profil
+
+~GET /api/user/me~
+
+fonctionne comme ~/api/user/:id~ mais renvoie l'utilisateur connecté
+
+* groupes
+
+** créer un groupe
+
+~POST /api/group~
+
+Contenu attendu:
+#+begin_src js
+{
+	"name":"nom du groupe"
+}
+#+end_src
+
+Réponses possibles:
+| code | réponse          |
+|------+------------------|
+|  400 | 'missing fields' |
+|  201 | {groupe créé}    |
+
+à faire: définir l'erreur si un groupe du même nom est créé (pour l'instant ça renvoie une erreur 500)
+
+** afficher les groupes rejoint
+
+~GET /api/group/joined~
+
+affiche les groupes dans lequel l'utilisateur est enregistré
+
+Réponse:
+| code | réponse    |
+|------+------------|
+|  200 | [{groupe}] |
+
+** annuaire des groupes
+
+~GET /api/group/directory~
+
+affiche les groupes visibles
+
+Réponse:
+| code | réponse    |
+|------+------------|
+|  200 | [{groupe}] |
+
+** rejoindre un groupe
+
+~POST /api/group/:id/join~
+
+Réponses possibles:
+| code | réponse                           |
+|------+-----------------------------------|
+|  403 | 'user already in group or banned' |
+|  404 | 'this group does not exist'       |
+|  204 |                                   |
+
+** quitter un groupe
+
+~POST /api/group/:id/leave~
+
+Réponses possibles:
+| code | réponse                     |
+|------+-----------------------------|
+|  404 | 'user not in group'         |
+|  404 | 'this group does not exist' |
+|  403 | 'user is banned'            |
+|  403 | 'user is creator'           |
+|  204 |                             |
