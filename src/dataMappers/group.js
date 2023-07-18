@@ -40,3 +40,10 @@ exports.leaveGroup = async function(groupId, userId) {
 	}
 	return await database.query('DELETE FROM "user_group" WHERE group_id=$1 AND user_id=$2', [groupId, userId]);
 }
+
+exports.listJoined = async function(userId) {
+	const list = await database.query('SELECT "group".*, "user_group".role FROM "group" \
+	                                   INNER JOIN "user_group" ON "group".id = "user_group".group_id\
+	                                   WHERE "user_group".user_id = $1 AND "user_group".role != -1', [userId]);
+	return list.rows;
+}

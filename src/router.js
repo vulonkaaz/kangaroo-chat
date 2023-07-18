@@ -12,6 +12,7 @@ router.get("/api/user/:id(\\d+)", verify, userCtrl.getProfile);
 router.get("/api/user/me", verify, userCtrl.getMyProfile);
 
 router.post("/api/group", verify, groupCtrl.createGroup);
+router.get ("/api/group/joined", verify, groupCtrl.listJoined);
 router.post("/api/group/:id(\\d+)/join", verify, groupCtrl.joinGroup);
 router.post("/api/group/:id(\\d+)/leave", verify, groupCtrl.leaveGroup);
 
