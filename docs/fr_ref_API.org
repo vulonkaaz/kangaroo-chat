@@ -17,10 +17,10 @@ Contenu attendu:
 #+end_src
 
 Réponses possibles:
-| code | réponse                   |
-|------+---------------------------|
-|  401 | 'invalid email or passwd' |
-|  200 | {"token":"token JWT"}     |
+| code | réponse                                             |
+|------+-----------------------------------------------------|
+|  401 | 'invalid email or passwd'                           |
+|  200 | {"token":"token JWT", "name","fullname", "picture"} |
 
 ** inscription
 

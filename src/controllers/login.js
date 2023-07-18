@@ -13,7 +13,7 @@ exports.login = async function(req, res) {
 		if (! await bcrypt.compare(password, user.pass) ) {
 			return res.status(401).send('invalid email or passwd');
 		}
-		res.json({token:makeToken({id:user.id})});
+		res.json({token:makeToken({id:user.id}), name:user.name, fullname:user.full_name, picture:user.picture});
 	} catch (err) {
 		res.status(500).send("server error");
 		console.log(err);

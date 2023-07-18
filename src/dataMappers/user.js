@@ -1,7 +1,7 @@
 const database = require('../database');
 
 exports.login = async function(email) {
-	const query = 'SELECT id, pass FROM "user" WHERE email=$1';
+	const query = 'SELECT id, name, full_name, picture, pass FROM "user" WHERE email=$1';
 	const result = await database.query(query, [email]);
 
 	return result.rows[0];
