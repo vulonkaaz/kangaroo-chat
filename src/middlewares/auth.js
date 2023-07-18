@@ -6,11 +6,11 @@ exports.makeToken = function(obj) {
 
 exports.verify = function(req,res,next) {
 	if (!req.headers.authorization) {
-		res.status(401).send("authentification required, no token provided");
+		return res.status(401).send("authentification required, no token provided");
 	}
 	const token = req.headers.authorization.split(' ')[1];
 	if(!token){
-		res.status(401).send("authentification required, no token provided");
+		return res.status(401).send("authentification required, no token provided");
 	}
 
 	jwt.verify(token, process.env.TOKEN_SECRET, (err, decodedToken) => {
