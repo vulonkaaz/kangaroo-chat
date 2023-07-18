@@ -57,7 +57,17 @@ exports.leaveGroup = async function(req, res) {
 exports.listJoined = async function(req, res) {
 	try {
 		const list = await groupMapper.listJoined(req.userToken.id);
-		res.status(200).json(list)
+		res.status(200).json(list);
+	} catch (err) {
+		res.status(500).send("server error");
+		console.log(err);
+	}
+}
+
+exports.directory = async function(_, res) {
+	try {
+		const list = await groupMapper.listVisible();
+		res.status(200).json(list);
 	} catch (err) {
 		res.status(500).send("server error");
 		console.log(err);

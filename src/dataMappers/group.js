@@ -47,3 +47,8 @@ exports.listJoined = async function(userId) {
 	                                   WHERE "user_group".user_id = $1 AND "user_group".role != -1', [userId]);
 	return list.rows;
 }
+
+exports.listVisible = async function() {
+	const list = await database.query('SELECT * FROM "group" WHERE visible');
+	return list.rows;
+}
