@@ -3,6 +3,7 @@ const router = express.Router();
 const loginCtrl = require('./controllers/login');
 const userCtrl = require('./controllers/user');
 const groupCtrl = require('./controllers/group');
+const chanCtrl = require('./controllers/channel');
 const { verify } = require("./middlewares/auth");
 
 router.post("/api/login", loginCtrl.login);
@@ -16,5 +17,7 @@ router.get ("/api/group/joined", verify, groupCtrl.listJoined);
 router.get ("/api/group/directory", verify, groupCtrl.directory);
 router.post("/api/group/:id(\\d+)/join", verify, groupCtrl.joinGroup);
 router.post("/api/group/:id(\\d+)/leave", verify, groupCtrl.leaveGroup);
+
+router.post("/api/group/:id(\\d+)/channel", verify, chanCtrl.createInGroup);
 
 module.exports = router;
