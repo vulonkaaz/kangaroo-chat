@@ -1,3 +1,4 @@
+
 #+TITLE: référence API Kangaro'O
 #+AUTHOR: Brice Tonon
 #+OPTIONS: ^:nil
@@ -126,3 +127,36 @@ Réponses possibles:
 |  403 | 'user is banned'            |
 |  403 | 'user is creator'           |
 |  204 |                             |
+
+* canals
+
+** créer un canal dans un groupe
+
+~POST /api/group/:id/channel~
+
+Contenu attendu:
+#+begin_src js
+{
+	"name":"nom du canal"
+}
+#+end_src
+
+Réponses possibles:
+| code | réponse                                           |
+|------+---------------------------------------------------|
+|  403 | 'user not in group'                               |
+|  404 | 'this group does not exist'                       |
+|  403 | 'not enough rights'                               |
+|  400 | 'another channel has the same name in this group' |
+|  201 | {channel}                                         |
+
+** voir les canals d'un groupe
+
+~GET /api/group/:id/channel~
+
+Réponses possibles:
+| code | réponse                     |
+|------+-----------------------------|
+|  403 | 'user not in group'         |
+|  404 | 'this group does not exist' |
+|  200 | [{channel}]                 |
