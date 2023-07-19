@@ -8,6 +8,9 @@ exports.createInGroup = async function(name, groupId, userId) {
 	}
 	// we check if user has the right to make a channel
 	const roleCheck = await database.query('SELECT role FROM "user_group" WHERE group_id=$1 AND user_id=$2', [groupId, userId]);
+	if (!roleCheck.rows[0]) {
+		throw new Error('user not in group');
+	}
 	const role = roleCheck.rows[0].role;
 	if (role != 2 && role != 3 && role != 4) {
 		throw new Error('not enough rights');
@@ -29,11 +32,16 @@ exports.createInGroup = async function(name, groupId, userId) {
 	return created.rows[0];
 }
 
-exports.getFromGroup = async function(groupId) {
+exports.getFromGroup = async function(groupId, userId) {
 	// we check if the group exist
 	const groupCheck = await database.query('SELECT name FROM "group" WHERE id=$1', [groupId]);
 	if (!groupCheck.rows[0]) {
 		throw new Error('group doesn\'t exist');
+	}
+	// we check if user is in the group
+	const roleCheck = await database.query('SELECT role FROM "user_group" WHERE group_id=$1 AND user_id=$2', [groupId, userId]);
+	if (!roleCheck.rows[0]) {
+		throw new Error('user not in group');
 	}
 	const list = await database.query('SELECT * FROM "channel" INNER JOIN "group_channel" \
 	                                   ON "group_channel".channel_id = "channel".id\

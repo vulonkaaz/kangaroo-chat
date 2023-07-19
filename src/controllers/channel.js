@@ -14,6 +14,9 @@ exports.createInGroup = async function(req, res) {
 		if(err.message =='group doesn\'t exist') {
 			return res.status(404).send('this group does not exist');
 		}
+		if(err.message =='user not in group') {
+			return res.status(403).send('user not in group');
+		}
 		if(err.message =='not enough rights') {
 			return res.status(403).send('not enough rights');
 		}
@@ -27,11 +30,14 @@ exports.createInGroup = async function(req, res) {
 
 exports.getFromGroup = async function(req, res) {
 	try {
-		const list = await chanMapper.getFromGroup(req.params.id);
+		const list = await chanMapper.getFromGroup(req.params.id, req.userToken.id);
 		res.status(200).json(list);
 	} catch (err) {
 		if(err.message =='group doesn\'t exist') {
 			return res.status(404).send('this group does not exist');
+		}
+		if(err.message =='user not in group') {
+			return res.status(403).send('user not in group');
 		}
 		res.status(500).send("server error");
 		console.log(err);
