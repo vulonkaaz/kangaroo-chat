@@ -24,3 +24,16 @@ exports.createInGroup = async function(req, res) {
 		console.log(err);
 	}
 }
+
+exports.getFromGroup = async function(req, res) {
+	try {
+		const list = await chanMapper.getFromGroup(req.params.id);
+		res.status(200).json(list);
+	} catch (err) {
+		if(err.message =='group doesn\'t exist') {
+			return res.status(404).send('this group does not exist');
+		}
+		res.status(500).send("server error");
+		console.log(err);
+	}
+}

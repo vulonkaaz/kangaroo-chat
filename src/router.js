@@ -19,5 +19,6 @@ router.post("/api/group/:id(\\d+)/join", verify, groupCtrl.joinGroup);
 router.post("/api/group/:id(\\d+)/leave", verify, groupCtrl.leaveGroup);
 
 router.post("/api/group/:id(\\d+)/channel", verify, chanCtrl.createInGroup);
+router.get ("/api/group/:id(\\d+)/channel", verify, chanCtrl.getFromGroup);
 
 module.exports = router;

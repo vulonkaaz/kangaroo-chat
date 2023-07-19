@@ -28,3 +28,15 @@ exports.createInGroup = async function(name, groupId, userId) {
 	database.query('INSERT INTO "group_channel" (group_id, channel_id) VALUES ($1,$2)', [groupId, created.rows[0].id]);
 	return created.rows[0];
 }
+
+exports.getFromGroup = async function(groupId) {
+	// we check if the group exist
+	const groupCheck = await database.query('SELECT name FROM "group" WHERE id=$1', [groupId]);
+	if (!groupCheck.rows[0]) {
+		throw new Error('group doesn\'t exist');
+	}
+	const list = await database.query('SELECT * FROM "channel" INNER JOIN "group_channel" \
+	                                   ON "group_channel".channel_id = "channel".id\
+	                                   WHERE "group_channel".group_id = $1', [groupId]);
+	return list.rows;
+}
