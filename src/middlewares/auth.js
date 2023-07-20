@@ -22,3 +22,20 @@ exports.verify = function(req,res,next) {
 		}
 	});
 }
+
+exports.socketVerify = function (socket, next) {
+	const token = socket.handshake.auth.token;
+
+	if(!token){
+		return next(new Error('Auth: no token provided'));
+	}
+
+	jwt.verify(token, process.env.TOKEN_SECRET, (err, decodedToken) => {
+		if (err) {
+			return next(new Error('Auth: invalid token provided'));
+		} else {
+			socket.user = decodedToken;
+			next();
+		}
+	});
+}
