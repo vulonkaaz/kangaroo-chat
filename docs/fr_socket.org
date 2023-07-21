@@ -1,0 +1,33 @@
+#+TITLE: Comment envoyer et recevoir des messages sur l'API socket.io de Kangaro'O
+#+AUTHOR: Brice Tonon
+#+OPTIONS: ^:nil
+
+* récupérer les dépendances
+
+~http://localhost:3000/socket.io/socket.io.js~
+
+* Se connecter
+
+~const socket = io("http://localhost:3000",{auth:{token:"<token JWT>"}})~
+
+* rejoindre/quitter un canal
+
+pour commencer à recevoir en temps réel les messages d'un canal il faut le rejoindre en émettant un évènement "join"
+
+(cette action n'a aucun effet sur la BDD et sert uniquement pour la connexion socket.io en cours)
+
+~socket.emit("join",idDuChannel)~
+
+~socket.emit("leave",idDuChannel)~
+
+* envoyer un message
+
+~socket.emit("message",{content:"<contenu du message>", channel_id:1})~
+
+* réceptionner un message
+
+#+begin_src js
+socket.on("message", (msg)=>{
+	console.log(msg) // msg contiendra l'objet message tel qu'il apparait en BDD
+});
+#+end_src
