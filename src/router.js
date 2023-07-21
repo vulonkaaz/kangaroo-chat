@@ -4,6 +4,7 @@ const loginCtrl = require('./controllers/login');
 const userCtrl = require('./controllers/user');
 const groupCtrl = require('./controllers/group');
 const chanCtrl = require('./controllers/channel');
+const msgCtrl = require('./controllers/message');
 const { verify } = require("./middlewares/auth");
 
 router.post("/api/login", loginCtrl.login);
@@ -20,5 +21,7 @@ router.post("/api/group/:id(\\d+)/leave", verify, groupCtrl.leaveGroup);
 
 router.post("/api/group/:id(\\d+)/channel", verify, chanCtrl.createInGroup);
 router.get ("/api/group/:id(\\d+)/channel", verify, chanCtrl.getFromGroup);
+
+router.get ('/api/channel/:id(\\d+)/message', verify, msgCtrl.getMessages);
 
 module.exports = router;

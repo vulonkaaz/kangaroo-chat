@@ -160,3 +160,19 @@ Réponses possibles:
 |  403 | 'user not in group'         |
 |  404 | 'this group does not exist' |
 |  200 | [{channel}]                 |
+
+* messages
+
+** récupérer les messages
+
+~GET /api/channel/:id/message?time=2023-07-21T10%3A04%3A34.389Z~
+
+récupère les 50 derniers messages d'un channel si la variable time n'est pas défini
+
+si time est défini, récupère les 50 derniers messages anterieurs à la date donnée
+
+Réponses possibles:
+| code | réponse               |
+|------+-----------------------|
+|  403 | 'user not in channel' |
+|  200 | [{message}]           |

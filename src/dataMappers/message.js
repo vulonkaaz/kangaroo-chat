@@ -28,3 +28,16 @@ exports.send = async function(userId, chanId, content) {
 }
 
 exports.userTest = userTest;
+
+exports.getMessages = async function(userId, chanId, timestamp) {
+	// we check if user is in the group
+	const check = await userTest(userId, chanId);
+	if (!check) {
+		throw new Error('user not in channel');
+	}
+	const list = await database.query(
+		'SELECT * FROM "message" WHERE channel_id=$1 AND created_at<$2 ORDER BY created_at DESC LIMIT 50',
+		[chanId,timestamp]
+	);
+	return list.rows;
+}

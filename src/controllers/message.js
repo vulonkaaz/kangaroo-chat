@@ -25,3 +25,17 @@ exports.joinRoom = async function(id, socket) {
 		console.log(err);
 	}
 }
+
+exports.getMessages = async function(req, res) {
+	try {
+		const timestamp = new Date(req.query.time || Date.now());
+		const list = await msgMapper.getMessages(req.userToken.id,req.params.id, timestamp);
+		res.status(200).json(list);
+	} catch (err) {
+		if(err.message =='user not in channel') {
+			return res.status(403).send('user not in channel');
+		}
+		res.status(500).send("server error");
+		console.log(err);
+	}
+}
