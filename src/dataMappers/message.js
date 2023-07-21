@@ -16,7 +16,7 @@ const userTest = async function(userId, chanId) {
 
 exports.send = async function(userId, chanId, content) {
 	// we check if user is in the group
-	const check = userTest(userId, chanId);
+	const check = await userTest(userId, chanId);
 	if (!check) {
 		throw new Error('user not in channel');
 	}
