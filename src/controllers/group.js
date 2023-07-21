@@ -73,3 +73,13 @@ exports.directory = async function(_, res) {
 		console.log(err);
 	}
 }
+
+exports.search = async function(req, res) {
+	try {
+		const list = await groupMapper.searchVisible(req.query.s);
+		res.status(200).json(list);
+	} catch (err) {
+		res.status(500).send("server error");
+		console.log(err);
+	}
+}

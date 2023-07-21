@@ -52,3 +52,8 @@ exports.listVisible = async function() {
 	const list = await database.query('SELECT * FROM "group" WHERE visible');
 	return list.rows;
 }
+
+exports.searchVisible = async function(s) {
+	const list = await database.query('SELECT * FROM "group" WHERE visible AND LOWER(name) LIKE LOWER($1)', ['%'+s+'%']);
+	return list.rows;
+}

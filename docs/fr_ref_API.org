@@ -104,6 +104,17 @@ Réponse:
 |------+------------|
 |  200 | [{groupe}] |
 
+** recherche de groupe
+
+~GET /api/group/search?s=~
+
+recherche dans les groupes visibles, la variable s correspond au terme à rechercher
+
+Réponse:
+| code | réponse    |
+|------+------------|
+|  200 | [{groupe}] |
+
 ** rejoindre un groupe
 
 ~POST /api/group/:id/join~
