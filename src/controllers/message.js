@@ -33,9 +33,9 @@ exports.getMessages = async function(req, res) {
 		res.status(200).json(list);
 	} catch (err) {
 		if(err.message =='user not in channel') {
-			return res.status(403).send('user not in channel');
+			return res.status(403).json({errCode:21,err:"not enough rights"});
 		}
-		res.status(500).send("server error");
+		res.status(500).json({errCode:0,err:"server error"});
 		console.log(err);
 	}
 }

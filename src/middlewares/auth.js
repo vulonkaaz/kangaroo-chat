@@ -6,16 +6,16 @@ exports.makeToken = function(obj) {
 
 exports.verify = function(req,res,next) {
 	if (!req.headers.authorization) {
-		return res.status(401).send("authentification required, no token provided");
+		return res.status(401).json({errCode:50,err:"no token provided"});
 	}
 	const token = req.headers.authorization.split(' ')[1];
 	if(!token){
-		return res.status(401).send("authentification required, no token provided");
+		return res.status(401).json({errCode:50,err:"no token provided"});
 	}
 
 	jwt.verify(token, process.env.TOKEN_SECRET, (err, decodedToken) => {
 		if (err) {
-			res.status(498).send("authentification required, invalid token provided");
+			res.status(498).json({errCode:51,err:"bad token"});
 		} else {
 			req.userToken = decodedToken;
 			next();

@@ -1,0 +1,26 @@
+#+TITLE: référence des codes d'erreur de l'API Kangaro'O
+#+AUTHOR: Brice Tonon
+#+OPTIONS: ^:nil
+
+Chaque erreur de l'API renvoie un JSON d'erreur sous cette forme:
+
+#+BEGIN_SRC js
+{
+	"errCode":0,
+	"err":"server error"
+}
+#+END_SRC
+
+~err~ est la description textuelle de l'erreur, ~errCode~ est le numéro de l'erreur tel que défini dans le tableau suivant :
+| errCode | description                                                                             |
+|---------+-----------------------------------------------------------------------------------------|
+|       0 | "server error"                                                                          |
+|      10 | "missing fields" des éléments obligatoire du formulaire n'ont pas été renséigé          |
+|      11 | "invalid elements" des éléments du formulaire ne correspondent pas à ce qui est attendu |
+|      12 | "bad login" email ou mot de passe incorrect                                             |
+|      13 | "already exist" l'élément créé a le même nom qu'un élément déjà existant                |
+|      20 | "not found"                                                                             |
+|      21 | "not enough rights"                                                                     |
+|      22 | "creator can't leave" le créateur d'un groupe ne peut pas le quitter                    |
+|      50 | "no token provided"                                                                     |
+|      51 | "bad token"                                                                             |

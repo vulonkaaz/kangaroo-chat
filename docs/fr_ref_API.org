@@ -20,7 +20,7 @@ Contenu attendu:
 Réponses possibles:
 | code | réponse                                             |
 |------+-----------------------------------------------------|
-|  401 | 'invalid email or passwd'                           |
+|  401 | err 12:"bad login"                                  |
 |  200 | {"token":"token JWT", "name","fullname", "picture"} |
 
 ** inscription
@@ -40,7 +40,7 @@ Contenu attendu:
 Réponses possibles:
 | code | réponse                                           |
 |------+---------------------------------------------------|
-|  400 | 'missing fields'                                  |
+|  400 | err 10:'missing fields'                           |
 |  201 | {"user":{utilisateur créé}, "token": "token JWT"} |
 
 * profils utilisateur
@@ -50,10 +50,10 @@ Réponses possibles:
 ~GET /api/user/:id~
 
 Réponses possibles:
-| code | réponse          |
-|------+------------------|
-|  404 | 'user not found' |
-|  200 | {utilisateur}    |
+| code | réponse            |
+|------+--------------------|
+|  404 | err 20:"not found" |
+|  200 | {utilisateur}      |
 
 ** récupérer son propre profil
 
@@ -75,10 +75,11 @@ Contenu attendu:
 #+end_src
 
 Réponses possibles:
-| code | réponse          |
-|------+------------------|
-|  400 | 'missing fields' |
-|  201 | {groupe créé}    |
+| code | réponse                 |
+|------+-------------------------|
+|  400 | err 10:"missing fields" |
+|  400 | err 13:"already exist"  |
+|  201 | {groupe créé}           |
 
 à faire: définir l'erreur si un groupe du même nom est créé (pour l'instant ça renvoie une erreur 500)
 
@@ -122,8 +123,8 @@ Réponse:
 Réponses possibles:
 | code | réponse                           |
 |------+-----------------------------------|
-|  403 | 'user already in group or banned' |
-|  404 | 'this group does not exist'       |
+|  403 | err 21:"not enough rights"        |
+|  404 | err 20:"not found"                |
 |  204 |                                   |
 
 ** quitter un groupe
@@ -131,13 +132,12 @@ Réponses possibles:
 ~POST /api/group/:id/leave~
 
 Réponses possibles:
-| code | réponse                     |
-|------+-----------------------------|
-|  404 | 'user not in group'         |
-|  404 | 'this group does not exist' |
-|  403 | 'user is banned'            |
-|  403 | 'user is creator'           |
-|  204 |                             |
+| code | réponse                      |
+|------+------------------------------|
+|  404 | err 20:"not found"           |
+|  403 | err 21:"not enough rights"   |
+|  403 | err 22 "creator can't leave" |
+|  204 |                              |
 
 * canals
 
@@ -153,24 +153,23 @@ Contenu attendu:
 #+end_src
 
 Réponses possibles:
-| code | réponse                                           |
-|------+---------------------------------------------------|
-|  403 | 'user not in group'                               |
-|  404 | 'this group does not exist'                       |
-|  403 | 'not enough rights'                               |
-|  400 | 'another channel has the same name in this group' |
-|  201 | {channel}                                         |
+| code | réponse                    |
+|------+----------------------------|
+|  404 | err 20:"not found"         |
+|  403 | err 21:"not enough rights" |
+|  400 | err 13:"already exist"     |
+|  201 | {channel}                  |
 
 ** voir les canals d'un groupe
 
 ~GET /api/group/:id/channel~
 
 Réponses possibles:
-| code | réponse                     |
-|------+-----------------------------|
-|  403 | 'user not in group'         |
-|  404 | 'this group does not exist' |
-|  200 | [{channel}]                 |
+| code | réponse                    |
+|------+----------------------------|
+|  403 | err 21:"not enough rights" |
+|  404 | err 20:"not found"         |
+|  200 | [{channel}]                |
 
 * messages
 
@@ -183,7 +182,7 @@ récupère les 50 derniers messages d'un channel si la variable time n'est pas d
 si time est défini, récupère les 50 derniers messages anterieurs à la date donnée
 
 Réponses possibles:
-| code | réponse               |
-|------+-----------------------|
-|  403 | 'user not in channel' |
-|  200 | [{message}]           |
+| code | réponse                    |
+|------+----------------------------|
+|  403 | err 21:"not enough rights" |
+|  200 | [{message}]                |
