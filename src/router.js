@@ -22,6 +22,7 @@ router.post("/api/group/:id(\\d+)/leave", verify, groupCtrl.leaveGroup);
 
 router.post("/api/group/:id(\\d+)/channel", verify, chanCtrl.createInGroup);
 router.get ("/api/group/:id(\\d+)/channel", verify, chanCtrl.getFromGroup);
+router.get ("/api/user/me/channel", verify, chanCtrl.getMyChannels);
 
 router.get ('/api/channel/:id(\\d+)/message', verify, msgCtrl.getMessages);
 

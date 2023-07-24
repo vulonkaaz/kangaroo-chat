@@ -43,3 +43,13 @@ exports.getFromGroup = async function(req, res) {
 		console.log(err);
 	}
 }
+
+exports.getMyChannels = async function(req, res) {
+	try {
+		const list = await chanMapper.getFromUser(req.userToken.id);
+		res.status(200).json(list);
+	} catch (err) {
+		res.status(500).json({errCode:0,err:"server error"});
+		console.log(err);
+	}
+}

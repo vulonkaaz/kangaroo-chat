@@ -48,3 +48,13 @@ exports.getFromGroup = async function(groupId, userId) {
 	                                   WHERE "group_channel".group_id = $1', [groupId]);
 	return list.rows;
 }
+
+exports.getFromUser = async function(userId) {
+	const list = await database.query(
+		'SELECT * FROM "channel" WHERE "channel".id IN\
+		 (SELECT channel_id FROM "group_channel" WHERE "group_id" IN\
+		  (SELECT group_id FROM "user_group" WHERE "user_id" = $1 AND "role"!= -1)\
+		 )', [userId]
+	);
+	return list.rows;
+}
