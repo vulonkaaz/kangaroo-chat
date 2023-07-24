@@ -171,6 +171,15 @@ Réponses possibles:
 |  404 | err 20:"not found"         |
 |  200 | [{channel}]                |
 
+** voir les canals auquel on a accès
+
+~GET /api/user/me/channel~
+
+Réponse:
+| code | réponse     |
+|------+-------------|
+|  200 | [{channel}] |
+
 * messages
 
 ** récupérer les messages
