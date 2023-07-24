@@ -21,8 +21,10 @@ exports.send = async function(userId, chanId, content) {
 		throw new Error('user not in channel');
 	}
 	const message = await database.query(
-		'INSERT INTO "message" (content, sender_id, channel_id) VALUES ($1,$2,$3)\
-		 RETURNING *', [content,userId,chanId]
+		'WITH inserted_msg AS \
+		(INSERT INTO "message" (content, sender_id, channel_id) VALUES ($1,$2,$3)\ RETURNING *)\
+		SELECT "inserted_msg".*, "user".name, "user".full_name, "user".picture \
+		FROM inserted_msg INNER JOIN "user" ON sender_id="user".id', [content,userId,chanId]
 	);
 	return message.rows[0];
 }
@@ -36,7 +38,9 @@ exports.getMessages = async function(userId, chanId, timestamp) {
 		throw new Error('user not in channel');
 	}
 	const list = await database.query(
-		'SELECT * FROM "message" WHERE channel_id=$1 AND created_at<$2 ORDER BY created_at DESC LIMIT 50',
+		'SELECT "message".*, "user".name, "user".full_name, "user".picture FROM "message" \
+		INNER JOIN "user" ON sender_id="user".id WHERE channel_id=$1 AND "message".created_at<$2 \
+		ORDER BY created_at DESC LIMIT 50',
 		[chanId,timestamp]
 	);
 	return list.rows;
