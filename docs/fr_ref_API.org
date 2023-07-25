@@ -1,4 +1,3 @@
-
 #+TITLE: référence API Kangaro'O
 #+AUTHOR: Brice Tonon
 #+OPTIONS: ^:nil
@@ -99,6 +98,26 @@ Réponses possibles:
 |  400 | err 10:"missing fields" |
 |  400 | err 13:"already exist"  |
 |  200 | {user}                  |
+
+** supprimer son profil
+
+~DELETE /api/user/me~
+
+Contenu attendu:
+#+begin_src js
+{
+	"password"
+}
+#+end_src
+
+Cette route supprime le compte de l'utilisateur, le mot de passe est attendu en plus du token par mesure de sécurité
+
+Réponses possibles:
+| code | réponse                 |
+|------+-------------------------|
+|  400 | err 10:"missing fields" |
+|  401 | err 12:"bad login"      |
+|  204 |                         |
 
 * groupes
 
