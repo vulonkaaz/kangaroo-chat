@@ -32,8 +32,8 @@ exports.updateProfile = async function(id, name, fullName, phone, title, positio
 		website, contact_email FROM "user" WHERE id=$1', [id]
 	);
 	const updated = await database.query(
-		'UPDATE "user" SET (name, full_name, phone, title, position, department, status, location, website, contact_email)\
-		 = ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) \
+		'UPDATE "user" SET (name, full_name, phone, title, position, department, status, location, website, contact_email, updated_at)\
+		 = ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10, NOW()) \
 		 WHERE id = $11\
 		 RETURNING id, email, name, full_name, picture, phone, title, position, department, status, location, website, contact_email',
 		[
@@ -56,8 +56,8 @@ exports.updateProfile = async function(id, name, fullName, phone, title, positio
 exports.rewriteProfile = async function(id, name, fullName, phone, title, position, department, status, 
 	                                     location, website, contact_email) {
 	const updated = await database.query(
-		'UPDATE "user" SET (name, full_name, phone, title, position, department, status, location, website, contact_email)\
-			= ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) \
+		'UPDATE "user" SET (name, full_name, phone, title, position, department, status, location, website, contact_email, updated_at)\
+			= ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10, NOW()) \
 			WHERE id = $11\
 			RETURNING id, email, name, full_name, picture, phone, title, position, department, status, location, website, contact_email',
 		[
