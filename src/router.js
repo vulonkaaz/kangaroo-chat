@@ -10,8 +10,9 @@ const { verify } = require("./middlewares/auth");
 router.post("/api/login", loginCtrl.login);
 router.post("/api/signup", loginCtrl.signup);
 
-router.get("/api/user/:id(\\d+)", verify, userCtrl.getProfile);
-router.get("/api/user/me", verify, userCtrl.getMyProfile);
+router.get  ("/api/user/:id(\\d+)", verify, userCtrl.getProfile);
+router.get  ("/api/user/me", verify, userCtrl.getMyProfile);
+router.patch("/api/user/me", verify, userCtrl.changeMyProfile);
 
 router.post("/api/group", verify, groupCtrl.createGroup);
 router.get ("/api/group/joined", verify, groupCtrl.listJoined);

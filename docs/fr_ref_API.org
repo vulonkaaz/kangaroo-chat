@@ -61,6 +61,34 @@ Réponses possibles:
 
 fonctionne comme ~/api/user/:id~ mais renvoie l'utilisateur connecté
 
+** modifier son profil
+
+~PATCH /api/user/me~
+
+Contenu attendu:
+#+begin_src js
+{
+	"name",
+	"full_name",
+	"phone",
+	"title",
+	"position",
+	"department",
+	"status",
+	"location",
+	"website",
+	"contact_email"
+}
+#+end_src
+
+Il n'est pas necessaire de remplir tous les champs, seuls les champs défini seront modifié en BDD (/!\ de part le fonctionnement de cette route il est impossible de remettre un champ à null si il est défini)
+
+Réponses possibles:
+| code | réponse                 |
+|------+-------------------------|
+|  400 | err 13:"already exist"  |
+|  200 | {user}                  |
+
 * groupes
 
 ** créer un groupe
