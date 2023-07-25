@@ -57,3 +57,19 @@ exports.searchVisible = async function(s) {
 	const list = await database.query('SELECT * FROM "group" WHERE visible AND LOWER(name) LIKE LOWER($1)', ['%'+s+'%']);
 	return list.rows;
 }
+
+exports.updateGroup = async function(id, name, userId) {
+	// we check if the user has the right to do that
+	const roleCheck = await database.query('SELECT role FROM "user_group" WHERE group_id=$1 AND user_id=$2', [id, userId]);
+	if (!roleCheck.rows[0]) {
+		throw new Error('user not in group');
+	}
+	const role = roleCheck.rows[0].role;
+	if (role != 3 && role != 4) {
+		throw new Error('not enough rights');
+	}
+	const updated = await database.query(
+		'UPDATE "group" SET name = $1 WHERE id = $2', [name, id]
+	);
+	return updated.rows[0];
+}

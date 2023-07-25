@@ -86,3 +86,26 @@ exports.search = async function(req, res) {
 		console.log(err);
 	}
 }
+
+exports.updateGroup = async function(req, res) {
+	try {
+		const {name} = req.body;
+		if (!name) {
+			return res.status(400).json({errCode:10,err:"missing fields"});
+		}
+		const updated = await groupMapper.updateGroup(req.params.id, name, req.userToken.id);
+		res.status(200).json(updated);
+	} catch (err) {
+		if(err.code=="23505") { //postgres code for unique key violation
+			return res.status(400).json({errCode:13,err:"already exist"});
+		}
+		if(err.message =='user not in group') {
+			return res.status(403).json({errCode:21,err:"not enough rights"});
+		}
+		if(err.message =='not enough rights') {
+			return res.status(403).json({errCode:21,err:"not enough rights"});
+		}
+		res.status(500).json({errCode:0,err:"server error"});
+		console.log(err);
+	}
+}
