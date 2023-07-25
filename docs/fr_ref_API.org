@@ -81,11 +81,22 @@ Contenu attendu:
 }
 #+end_src
 
-Il n'est pas necessaire de remplir tous les champs, seuls les champs défini seront modifié en BDD (/!\ de part le fonctionnement de cette route il est impossible de remettre un champ à null si il est défini)
+Il n'est pas necessaire de remplir tous les champs, seuls les champs défini seront modifié en BDD (/!\ de part le fonctionnement de cette route il est impossible de remettre un champ à null ou à "" si il est défini, pour celà il faut utiliser PUT)
 
 Réponses possibles:
 | code | réponse                 |
 |------+-------------------------|
+|  400 | err 13:"already exist"  |
+|  200 | {user}                  |
+
+~PUT /api/user/me~
+
+fonctionne comme patch à la différence qu'il modifie tous les champs, les champs non définis seront remis à null
+
+Réponses possibles:
+| code | réponse                 |
+|------+-------------------------|
+|  400 | err 10:"missing fields" |
 |  400 | err 13:"already exist"  |
 |  200 | {user}                  |
 

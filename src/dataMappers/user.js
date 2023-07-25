@@ -52,3 +52,27 @@ exports.updateProfile = async function(id, name, fullName, phone, title, positio
 	);
 	return updated.rows[0];
 }
+
+exports.rewriteProfile = async function(id, name, fullName, phone, title, position, department, status, 
+	                                     location, website, contact_email) {
+	const updated = await database.query(
+		'UPDATE "user" SET (name, full_name, phone, title, position, department, status, location, website, contact_email)\
+			= ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) \
+			WHERE id = $11\
+			RETURNING id, email, name, full_name, picture, phone, title, position, department, status, location, website, contact_email',
+		[
+			name,
+			fullName,
+			phone,
+			title,
+			position,
+			department,
+			status,
+			location,
+			website,
+			contact_email,
+			id
+		]
+	);
+	return updated.rows[0];
+}
