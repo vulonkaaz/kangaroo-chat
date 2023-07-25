@@ -39,3 +39,24 @@ exports.signup = async function(req, res) {
 		console.log(err);
 	}
 }
+
+exports.delete = async function(req, res) {
+	try {
+		const {password} = req.body;
+		if (!password) {
+			return res.status(400).json({errCode:10,err:"missing fields"});
+		}
+		const userPass = await userMapper.getPassword(req.userToken.id);
+		if (!userPass) {
+			return res.status(401).json({errCode:12,err:"bad login"});
+		}
+		if (! await bcrypt.compare(password, userPass) ) {
+			return res.status(401).json({errCode:12,err:"bad login"});
+		}
+		await userMapper.delete(req.userToken.id);
+		res.status(204).send();
+	} catch (err) {
+		res.status(500).json({errCode:0,err:"server error"});
+		console.log(err);
+	}
+}

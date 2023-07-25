@@ -14,6 +14,11 @@ exports.create = async function(email, password, name, fullname) {
 	return result.rows[0];
 }
 
+exports.getPassword = async function(id) {
+	const result = await database.query('SELECT pass from "user" WHERE id=$1', [id]);
+	return result.rows[0].pass;
+}
+
 exports.getProfile = async function(id) {
 	const query = 'SELECT id, email, name, full_name, picture, phone, title, position, department, status, location, \
 	               website, contact_email \
@@ -75,4 +80,10 @@ exports.rewriteProfile = async function(id, name, fullName, phone, title, positi
 		]
 	);
 	return updated.rows[0];
+}
+
+exports.delete = async function(id) {
+	await database.query('DELETE FROM "user" WHERE id=$1', [id]);
+	await database.query('DELETE FROM "user_group" WHERE user_id=$1', [id]);
+	await database.query('DELETE FROM "user_channel" WHERE user_id=$1', [id]);
 }
