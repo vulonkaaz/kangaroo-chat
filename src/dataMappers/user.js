@@ -83,7 +83,7 @@ exports.rewriteProfile = async function(id, name, fullName, phone, title, positi
 }
 
 exports.delete = async function(id) {
-	await database.query('DELETE FROM "user" WHERE id=$1', [id]);
 	await database.query('DELETE FROM "user_group" WHERE user_id=$1', [id]);
 	await database.query('DELETE FROM "user_channel" WHERE user_id=$1', [id]);
+	await database.query('DELETE FROM "user" WHERE id=$1', [id]);
 }

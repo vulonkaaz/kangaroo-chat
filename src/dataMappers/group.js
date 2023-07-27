@@ -84,13 +84,12 @@ exports.delete = async function(id, userId) {
 	if (role != 4) {
 		throw new Error('not enough rights');
 	}
-	await database.query('DELETE FROM "group" WHERE id = $1', [id]);
-	database.query('DELETE FROM "user_group" WHERE group_id = $1' [id]);
+	await database.query('DELETE FROM "user_group" WHERE group_id = $1', [id]);
 	// deleting the channels of the group
 	await database.query('DELETE FROM "message" WHERE channel_id IN \
-	(SELECT channel_id in group_channel WHERE group_id = $1 AND main)');
+	(SELECT channel_id in group_channel WHERE group_id = $1 AND main)', [id]);
 	await database.query('DELETE FROM "channel" WHERE "channel".id IN \
-	(SELECT channel_id in group_channel WHERE group_id = $1 AND main)');
-	database.query('DELETE FROM "group_channel" WHERE channel_id IN \
-	(SELECT channel_id in group_channel WHERE group_id = $1 AND main)');
+	(SELECT channel_id in group_channel WHERE group_id = $1 AND main)', [id]);
+	await database.query('DELETE FROM "group_channel" WHERE group_id =$1', [id]);
+	await database.query('DELETE FROM "group" WHERE id = $1', [id]);
 }
