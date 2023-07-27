@@ -23,6 +23,7 @@ router.get ("/api/group/search", verify, groupCtrl.search);
 router.post("/api/group/:id(\\d+)/join", verify, groupCtrl.joinGroup);
 router.post("/api/group/:id(\\d+)/leave", verify, groupCtrl.leaveGroup);
 router.patch("/api/group/:id(\\d+)", verify, groupCtrl.updateGroup);
+router.delete("/api/group/:id(\\d+)", verify, groupCtrl.deleteGroup);
 
 router.post("/api/group/:id(\\d+)/channel", verify, chanCtrl.createInGroup);
 router.get ("/api/group/:id(\\d+)/channel", verify, chanCtrl.getFromGroup);

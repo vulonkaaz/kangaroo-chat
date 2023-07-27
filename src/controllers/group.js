@@ -109,3 +109,19 @@ exports.updateGroup = async function(req, res) {
 		console.log(err);
 	}
 }
+
+exports.deleteGroup = async function(req, res) {
+	try {
+		await groupMapper.deleteGroup(req.params.id, req.userToken.id);
+		res.status(204).send();
+	} catch (err) {
+		if(err.message =='user not in group') {
+			return res.status(403).json({errCode:21,err:"not enough rights"});
+		}
+		if(err.message =='not enough rights') {
+			return res.status(403).json({errCode:21,err:"not enough rights"});
+		}
+		res.status(500).json({errCode:0,err:"server error"});
+		console.log(err);
+	}
+}

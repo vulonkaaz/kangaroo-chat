@@ -73,3 +73,24 @@ exports.updateGroup = async function(id, name, userId) {
 	);
 	return updated.rows[0];
 }
+
+exports.delete = async function(id, userId) {
+	// we check if the user has the right to do that
+	const roleCheck = await database.query('SELECT role FROM "user_group" WHERE group_id=$1 AND user_id=$2', [id, userId]);
+	if (!roleCheck.rows[0]) {
+		throw new Error('user not in group');
+	}
+	const role = roleCheck.rows[0].role;
+	if (role != 4) {
+		throw new Error('not enough rights');
+	}
+	await database.query('DELETE FROM "group" WHERE id = $1', [id]);
+	database.query('DELETE FROM "user_group" WHERE group_id = $1' [id]);
+	// deleting the channels of the group
+	await database.query('DELETE FROM "message" WHERE channel_id IN \
+	(SELECT channel_id in group_channel WHERE group_id = $1 AND main)');
+	await database.query('DELETE FROM "channel" WHERE "channel".id IN \
+	(SELECT channel_id in group_channel WHERE group_id = $1 AND main)');
+	database.query('DELETE FROM "group_channel" WHERE channel_id IN \
+	(SELECT channel_id in group_channel WHERE group_id = $1 AND main)');
+}

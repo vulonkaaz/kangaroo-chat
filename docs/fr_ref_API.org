@@ -197,6 +197,36 @@ Réponses possibles:
 |  403 | err 22 "creator can't leave" |
 |  204 |                              |
 
+** modifier un groupe
+
+~PATCH /api/group/:id~
+
+Contenu attendu:
+#+begin_src js
+{
+	"name"
+}
+#+end_src
+
+Réponses possibles:
+| code | réponse                    |
+|------+----------------------------|
+|  400 | err 13:"already exist"     |
+|  403 | err 21:"not enough rights" |
+|  200 | {group}                    |
+
+** supprimer un groupe
+
+~DELETE /api/group/:id~
+
+supprime le groupe ainsi que tous les channels associé
+
+Réponses possibles:
+| code | réponse                    |
+|------+----------------------------|
+|  403 | err 21:"not enough rights" |
+|  204 |                            |
+
 * canals
 
 ** créer un canal dans un groupe
