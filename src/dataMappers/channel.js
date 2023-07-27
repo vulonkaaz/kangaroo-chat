@@ -58,3 +58,30 @@ exports.getFromUser = async function(userId) {
 	);
 	return list.rows;
 }
+
+exports.modify = async function(id, name, userId) {
+	// we check if user has the rights
+	const groupCheck = await database.query(
+		'SELECT role FROM "user_group" WHERE group_id IN \
+		 (SELECT group_id FROM "group_channel" WHERE channel_id =$1) AND user_id = $2', 
+		[id, userId]
+	);
+	const role = groupCheck.rows[0].role;
+	if (role != 2 && role != 3 && role != 4) {
+		throw new Error('not enough rights');
+	}
+	// we check if channel name is unique in group
+	const nameCheck = await database.query(
+		'SELECT * FROM "channel" WHERE name = $1 AND id IN\
+		 (SELECT channel_id FROM "group_channel" WHERE group_id IN\
+		  (SELECT group_id FROM "group_channel"  WHERE channel_id=$2 AND main)\
+		 )', [name, id]
+	);
+	if (nameCheck.rows[0]) {
+		throw new Error("channel already exist");
+	}
+	const updated = await database.query(
+		'UPDATE "channel" SET name = $1 WHERE id = $2 RETURNING *', [name, id]
+	);
+	return updated.rows[0];
+}

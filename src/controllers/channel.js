@@ -53,3 +53,24 @@ exports.getMyChannels = async function(req, res) {
 		console.log(err);
 	}
 }
+
+exports.modifyChannel = async function(req, res) {
+	try {
+		const {name} = req.body;
+		if (!name) {
+			return res.status(400).json({errCode:10,err:"missing fields"});
+		}
+		
+		const updated = await chanMapper.modify(req.params.id, name, req.userToken.id);
+		res.status(200).json(updated);
+	} catch (err) {
+		if(err.message =='not enough rights') {
+			return res.status(403).json({errCode:21,err:"not enough rights"});
+		}
+		if(err.message =='channel already exist') {
+			return res.status(400).json({errCode:13,err:"already exist"});
+		}
+		res.status(500).json({errCode:0,err:"server error"});
+		console.log(err);
+	}
+}
