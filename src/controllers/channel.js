@@ -74,3 +74,16 @@ exports.modifyChannel = async function(req, res) {
 		console.log(err);
 	}
 }
+
+exports.deleteChannel = async function(req, res) {
+	try {
+		await chanMapper.delete(req.params.id, req.userToken.id);
+		res.status(204).send();
+	} catch (err) {
+		if(err.message =='not enough rights') {
+			return res.status(403).json({errCode:21,err:"not enough rights"});
+		}
+		res.status(500).json({errCode:0,err:"server error"});
+		console.log(err);
+	}
+}

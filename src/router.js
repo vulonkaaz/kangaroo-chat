@@ -29,6 +29,7 @@ router.post  ("/api/group/:id(\\d+)/channel", verify, chanCtrl.createInGroup);
 router.get   ("/api/group/:id(\\d+)/channel", verify, chanCtrl.getFromGroup);
 router.get   ("/api/user/me/channel", verify, chanCtrl.getMyChannels);
 router.patch ('/api/channel/:id(\\d+)', verify, chanCtrl.modifyChannel);
+router.delete('/api/channel/:id(\\d+)', verify, chanCtrl.deleteChannel);
 
 router.get ('/api/channel/:id(\\d+)/message', verify, msgCtrl.getMessages);
 

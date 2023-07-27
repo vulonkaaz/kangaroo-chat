@@ -85,3 +85,19 @@ exports.modify = async function(id, name, userId) {
 	);
 	return updated.rows[0];
 }
+
+exports.delete = async function(id, userId) {
+	// we check if user has the rights
+	const groupCheck = await database.query(
+		'SELECT role FROM "user_group" WHERE group_id IN \
+		 (SELECT group_id FROM "group_channel" WHERE channel_id =$1) AND user_id = $2', 
+		[id, userId]
+	);
+	const role = groupCheck.rows[0].role;
+	if (role != 2 && role != 3 && role != 4) {
+		throw new Error('not enough rights');
+	}
+	await database.query('DELETE FROM "message" WHERE channel_id = $1',[id]);
+	await database.query('DELETE FROM "group_channel" WHERE channel_id = $1',[id]);
+	await database.query('DELETE FROM "channel" WHERE id = $1',[id]);
+}
