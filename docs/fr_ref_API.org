@@ -99,6 +99,25 @@ Réponses possibles:
 |  400 | err 13:"already exist"  |
 |  200 | {user}                  |
 
+** modifier son avatar
+
+~POST /api/user/me/avatar~
+
+cette route attend des données de type multipart/form-data avec un fichier image sur le champ "file"
+
+le fichier envoyé sera enregistré dans le dossier media et accessible sur l'adresse ~/media/<nom du fichier>~
+
+le fichier sera également défini comme photo de profil de l'utilisateur
+
+Réponses possibles:
+| code | réponse                 |
+|------+-------------------------|
+|  400 | err 30:"no file"        |
+|  400 | err 31:"bad file"       |
+|  400 | err 32:"file too large" |
+|  200 | {user}                  |
+
+
 ** supprimer son profil
 
 ~DELETE /api/user/me~

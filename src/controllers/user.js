@@ -60,3 +60,16 @@ exports.rewriteMyProfile = async function(req, res) {
 		console.log(err);
 	}
 }
+
+exports.avatarUpload = async function(req, res) {
+	try {
+		if (!req.file) {
+			return res.status(400).json({errCode:30, err:"no file"});
+		}
+		const updated = await userMapper.updateAvatar(req.userToken.id, req.file.filename);
+		res.status(200).json(updated);
+	} catch (err) {
+		res.status(500).json({errCode:0,err:"server error"});
+		console.log(err);
+	}
+}

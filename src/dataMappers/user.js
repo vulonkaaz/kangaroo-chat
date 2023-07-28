@@ -82,6 +82,19 @@ exports.rewriteProfile = async function(id, name, fullName, phone, title, positi
 	return updated.rows[0];
 }
 
+exports.updateAvatar = async function(id, filename) {
+	const updated = await database.query(
+		'UPDATE "user" SET (picture, updated_at) = ($1, NOW()) \
+			WHERE id = $2\
+			RETURNING id, email, name, full_name, picture, phone, title, position, department, status, location, website, contact_email',
+		[
+			filename,
+			id
+		]
+	);
+	return updated.rows[0];
+}
+
 exports.delete = async function(id) {
 	await database.query('DELETE FROM "user_group" WHERE user_id=$1', [id]);
 	await database.query('DELETE FROM "user_channel" WHERE user_id=$1', [id]);
