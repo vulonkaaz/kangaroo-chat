@@ -19,6 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 app.use(router);
+app.use('/media', express.static('media'));
 app.use((_,res) => {res.status(404).send("route not defined")});
 
 socketHandler(io);

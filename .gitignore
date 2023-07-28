@@ -127,3 +127,6 @@ dist
 auto-save-list
 tramp
 .\#*
+
+# media folder
+media/*

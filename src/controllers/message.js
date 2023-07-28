@@ -39,3 +39,10 @@ exports.getMessages = async function(req, res) {
 		console.log(err);
 	}
 }
+
+exports.upload = function(req, res) {
+	if (!req.file) {
+		return res.status(400).json({errCode:30, err:"no file"});
+	}
+	res.status(201).json({filename:req.file.filename});
+}

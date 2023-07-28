@@ -22,5 +22,8 @@ Chaque erreur de l'API renvoie un JSON d'erreur sous cette forme:
 |      20 | "not found"                                                                             |
 |      21 | "not enough rights"                                                                     |
 |      22 | "creator can't leave" le créateur d'un groupe ne peut pas le quitter                    |
+|      30 | "no file" le fichier n'existe pas                                                       |
+|      31 | "bad file" le fichier a été rejeté                                                      |
+|      32 | "file too large"                                                                        |
 |      50 | "no token provided"                                                                     |
 |      51 | "bad token"                                                                             |

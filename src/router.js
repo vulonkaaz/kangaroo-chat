@@ -6,6 +6,13 @@ const groupCtrl = require('./controllers/group');
 const chanCtrl = require('./controllers/channel');
 const msgCtrl = require('./controllers/message');
 const { verify } = require("./middlewares/auth");
+const { fileCheck, errHandler: upldErrHandler } = require("./middlewares/upload");
+const multer  = require('multer');
+const upload = multer({ 
+	dest: 'media/',
+	fileFilter: fileCheck,
+	limits: {fileSize: 8388608} // 8 MiB = 8388608 B
+ });
 
 router.post("/api/login", loginCtrl.login);
 router.post("/api/signup", loginCtrl.signup);
@@ -32,5 +39,6 @@ router.patch ('/api/channel/:id(\\d+)', verify, chanCtrl.modifyChannel);
 router.delete('/api/channel/:id(\\d+)', verify, chanCtrl.deleteChannel);
 
 router.get ('/api/channel/:id(\\d+)/message', verify, msgCtrl.getMessages);
+router.post('/api/upload', verify, upload.single("file"), msgCtrl.upload, upldErrHandler);
 
 module.exports = router;
