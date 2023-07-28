@@ -2,13 +2,13 @@ const msgMapper = require('../dataMappers/message');
 
 exports.sendMessage = async function(message, user, io) {
 	try {
-		const {content, channel_id} = message;
+		const {content, attachment, channel_id} = message;
 
-		if (!content) {
+		if (!content && !attachment) {
 			return null;
 		}
 
-		messageDB = await msgMapper.send(user.id, channel_id, content);
+		messageDB = await msgMapper.send(user.id, channel_id, content, attachment);
 		io.to("chan-"+channel_id).emit("message", messageDB);
 	} catch (err) {
 		console.log(err);

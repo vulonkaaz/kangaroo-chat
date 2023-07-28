@@ -14,7 +14,7 @@ const userTest = async function(userId, chanId) {
 	}
 }
 
-exports.send = async function(userId, chanId, content) {
+exports.send = async function(userId, chanId, content, attachment) {
 	// we check if user is in the group
 	const check = await userTest(userId, chanId);
 	if (!check) {
@@ -22,9 +22,9 @@ exports.send = async function(userId, chanId, content) {
 	}
 	const message = await database.query(
 		'WITH inserted_msg AS \
-		(INSERT INTO "message" (content, sender_id, channel_id) VALUES ($1,$2,$3)\ RETURNING *)\
+		(INSERT INTO "message" (content, attachment, sender_id, channel_id) VALUES ($1,$2,$3,$4)\ RETURNING *)\
 		SELECT "inserted_msg".*, "user".name, "user".full_name, "user".picture \
-		FROM inserted_msg INNER JOIN "user" ON sender_id="user".id', [content,userId,chanId]
+		FROM inserted_msg INNER JOIN "user" ON sender_id="user".id', [content, attachment,userId,chanId]
 	);
 	return message.rows[0];
 }
