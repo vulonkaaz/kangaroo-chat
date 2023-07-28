@@ -87,9 +87,11 @@ exports.delete = async function(id, userId) {
 	await database.query('DELETE FROM "user_group" WHERE group_id = $1', [id]);
 	// deleting the channels of the group
 	await database.query('DELETE FROM "message" WHERE channel_id IN \
-	(SELECT channel_id in group_channel WHERE group_id = $1 AND main)', [id]);
-	await database.query('DELETE FROM "channel" WHERE "channel".id IN \
-	(SELECT channel_id in group_channel WHERE group_id = $1 AND main)', [id]);
-	await database.query('DELETE FROM "group_channel" WHERE group_id =$1', [id]);
+	(SELECT channel_id FROM group_channel WHERE group_id = $1 AND main)', [id]);
+	await database.query('WITH deleted_channels AS (\
+		DELETE FROM "group_channel" WHERE group_id = $1 AND main \
+		RETURNING channel_id)\
+		DELETE FROM "channel" WHERE "channel".id IN (SELECT channel_id FROM deleted_channels)', [id]);
+	await database.query('DELETE FROM "group_channel" WHERE group_id = $1', [id]);
 	await database.query('DELETE FROM "group" WHERE id = $1', [id]);
 }

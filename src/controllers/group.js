@@ -110,9 +110,9 @@ exports.updateGroup = async function(req, res) {
 	}
 }
 
-exports.deleteGroup = async function(req, res) {
+exports.delete = async function(req, res) {
 	try {
-		await groupMapper.deleteGroup(req.params.id, req.userToken.id);
+		await groupMapper.delete(req.params.id, req.userToken.id);
 		res.status(204).send();
 	} catch (err) {
 		if(err.message =='user not in group') {
