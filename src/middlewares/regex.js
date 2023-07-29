@@ -3,3 +3,8 @@ exports.mailCheck = function(mail) {
 	// dont ask me how it work i found it here https://www.regextester.com/115911
 	// apparently its rfc 5322 compliant
 }
+
+exports.handleCheck = function(name) {
+	return /^([a-zA-Z0-9_.\-]){1,30}$/.test(name);
+	// check if it is 1 to 30 char string with alphanumeric chars + the characters ".", "-" and "_"
+}

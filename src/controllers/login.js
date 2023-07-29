@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const userMapper = require("../dataMappers/user");
 const { makeToken } = require("../middlewares/auth");
-const { mailCheck } = require("../middlewares/regex");
+const { mailCheck, handleCheck } = require("../middlewares/regex");
 
 exports.login = async function(req, res) {
 	try {
@@ -29,6 +29,9 @@ exports.signup = async function(req, res) {
 			return res.status(400).json({errCode:10,err:"missing fields"});
 		}
 		if (!mailCheck(email) || email.length > 50) {
+			return res.status(400).json({errCode:11,err:"invalid elements"});
+		}
+		if (!handleCheck(name)) {
 			return res.status(400).json({errCode:11,err:"invalid elements"});
 		}
 		const hash = await bcrypt.hash(password, 10);

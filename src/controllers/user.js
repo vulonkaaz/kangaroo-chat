@@ -1,4 +1,5 @@
 const userMapper = require("../dataMappers/user");
+const { mailCheck, handleCheck } = require("../middlewares/regex");
 
 exports.getProfile = async function(req, res) {
 	try {
@@ -39,6 +40,12 @@ exports.search = async function(req, res) {
 exports.changeMyProfile = async function(req, res) {
 	try {
 		const {name, full_name, phone, title, position, department, status, location, website, contact_email} = req.body;
+		if ( !!contact_email &&(!mailCheck(contact_email) || contact_email.length > 50)) {
+			return res.status(400).json({errCode:11,err:"invalid elements"});
+		} // the !! && is cause the field can be undefined
+		if ( !!name && !handleCheck(name)) {
+			return res.status(400).json({errCode:11,err:"invalid elements"});
+		}
 		const updated = await userMapper.updateProfile(
 			req.userToken.id, name, full_name, phone, title, position, department, status, location, website, contact_email
 		);
@@ -55,6 +62,12 @@ exports.changeMyProfile = async function(req, res) {
 exports.rewriteMyProfile = async function(req, res) {
 	try {
 		const {name, full_name, phone, title, position, department, status, location, website, contact_email} = req.body;
+		if (!mailCheck(contact_email) || contact_email.length > 50) {
+			return res.status(400).json({errCode:11,err:"invalid elements"});
+		}
+		if (!handleCheck(name)) {
+			return res.status(400).json({errCode:11,err:"invalid elements"});
+		}
 		const updated = await userMapper.rewriteProfile(
 			req.userToken.id, name, full_name, phone, title, position, department, status, location, website, contact_email
 		);
