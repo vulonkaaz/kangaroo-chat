@@ -26,6 +26,16 @@ exports.getMyProfile = async function(req, res) {
 	}
 }
 
+exports.search = async function(req, res) {
+	try {
+		const list = await userMapper.search(req.query.s);
+		res.status(200).json(list);
+	}catch (err) {
+		res.status(500).json({errCode:0,err:"server error"});
+		console.log(err);
+	}
+}
+
 exports.changeMyProfile = async function(req, res) {
 	try {
 		const {name, full_name, phone, title, position, department, status, location, website, contact_email} = req.body;

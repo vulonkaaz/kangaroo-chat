@@ -25,9 +25,16 @@ exports.getProfile = async function(id) {
 	               FROM "user" WHERE id=$1';
 	const result = await database.query(query, [id]);
 
-	console.log(id);
-	console.log(result.rows);
 	return result.rows[0];
+}
+
+exports.search = async function(s) {
+	const query = 'SELECT id, email, name, full_name, picture, phone, title, position, department, status, location, \
+	               website, contact_email \
+	               FROM "user" WHERE LOWER(full_name) LIKE LOWER($1)';
+	const result = await database.query(query, ['%'+s+'%']);
+
+	return result.rows;
 }
 
 exports.updateProfile = async function(id, name, fullName, phone, title, position, department, status, 

@@ -60,6 +60,17 @@ Réponses possibles:
 
 fonctionne comme ~/api/user/:id~ mais renvoie l'utilisateur connecté
 
+** rechercher des profils
+
+~GET /api/user/search?s=~
+
+recherche dans les utilisateurs, la variable s correspond au terme à rechercher
+
+Réponse:
+| code | réponse    |
+|------+------------|
+|  200 | [{user}]   |
+
 ** modifier son profil
 
 ~PATCH /api/user/me~

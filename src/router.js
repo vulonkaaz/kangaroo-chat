@@ -18,6 +18,7 @@ router.post("/api/login", loginCtrl.login);
 router.post("/api/signup", loginCtrl.signup);
 
 router.get   ("/api/user/:id(\\d+)", verify, userCtrl.getProfile);
+router.get   ("/api/user/search", verify, userCtrl.search);
 router.get   ("/api/user/me", verify, userCtrl.getMyProfile);
 router.patch ("/api/user/me", verify, userCtrl.changeMyProfile);
 router.put   ("/api/user/me", verify, userCtrl.rewriteMyProfile);
