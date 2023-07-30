@@ -8,3 +8,8 @@ exports.handleCheck = function(name) {
 	return /^([a-zA-Z0-9_.\-]){1,30}$/.test(name);
 	// check if it is 1 to 30 char string with alphanumeric chars + the characters ".", "-" and "_"
 }
+
+exports.fieldCheck = function(content) {
+	return /^[^\r\n]{1,40}$/.test(content);
+	// test if the string is single line and no longer than 40 char
+}

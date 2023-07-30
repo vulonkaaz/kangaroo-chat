@@ -1,5 +1,5 @@
 const userMapper = require("../dataMappers/user");
-const { mailCheck, handleCheck } = require("../middlewares/regex");
+const { mailCheck, handleCheck, fieldCheck } = require("../middlewares/regex");
 
 exports.getProfile = async function(req, res) {
 	try {
@@ -46,6 +46,17 @@ exports.changeMyProfile = async function(req, res) {
 		if ( !!name && !handleCheck(name)) {
 			return res.status(400).json({errCode:11,err:"invalid elements"});
 		}
+		if ( (!!full_name && !fieldCheck(full_name))
+			|| (!!phone && !fieldCheck(phone))
+			|| (!!title && !fieldCheck(title))
+			|| (!!position && !fieldCheck(position))
+			|| (!!department && !fieldCheck(department))
+			|| (!!status && !fieldCheck(status))
+			|| (!!location && !fieldCheck(location))
+			|| (!!website && !fieldCheck(website))
+		) {
+			return res.status(400).json({errCode:11,err:"invalid elements"});
+		}
 		const updated = await userMapper.updateProfile(
 			req.userToken.id, name, full_name, phone, title, position, department, status, location, website, contact_email
 		);
@@ -66,6 +77,17 @@ exports.rewriteMyProfile = async function(req, res) {
 			return res.status(400).json({errCode:11,err:"invalid elements"});
 		}
 		if (!handleCheck(name)) {
+			return res.status(400).json({errCode:11,err:"invalid elements"});
+		}
+		if ( fieldCheck(full_name)
+			|| (!!phone && !fieldCheck(phone))
+			|| (!!title && !fieldCheck(title))
+			|| (!!position && !fieldCheck(position))
+			|| (!!department && !fieldCheck(department))
+			|| (!!status && !fieldCheck(status))
+			|| (!!location && !fieldCheck(location))
+			|| (!!website && !fieldCheck(website))
+		) {
 			return res.status(400).json({errCode:11,err:"invalid elements"});
 		}
 		const updated = await userMapper.rewriteProfile(
