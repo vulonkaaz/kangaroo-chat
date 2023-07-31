@@ -1,4 +1,5 @@
 chanMapper = require('../dataMappers/channel');
+const { fieldCheck } = require("../middlewares/regex");
 
 exports.createInGroup = async function(req, res) {
 	try {
@@ -6,6 +7,9 @@ exports.createInGroup = async function(req, res) {
 
 		if (!name) {
 			return res.status(400).json({errCode:10,err:"missing fields"});
+		}
+		if (!fieldCheck(name)) {
+			return res.status(400).json({errCode:11,err:"invalid elements"});
 		}
 		const created = await chanMapper.createInGroup(name, req.params.id, req.userToken.id);
 		res.status(201).json(created);
@@ -59,6 +63,9 @@ exports.modifyChannel = async function(req, res) {
 		const {name} = req.body;
 		if (!name) {
 			return res.status(400).json({errCode:10,err:"missing fields"});
+		}
+		if (!fieldCheck(name)) {
+			return res.status(400).json({errCode:11,err:"invalid elements"});
 		}
 		
 		const updated = await chanMapper.modify(req.params.id, name, req.userToken.id);

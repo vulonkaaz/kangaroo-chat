@@ -1,4 +1,5 @@
 groupMapper = require('../dataMappers/group');
+const { fieldCheck } = require("../middlewares/regex");
 
 exports.createGroup = async function(req, res) {
 	try {
@@ -6,6 +7,9 @@ exports.createGroup = async function(req, res) {
 
 		if (!name) {
 			return res.status(400).json({errCode:10,err:"missing fields"});
+		}
+		if (!fieldCheck(name)) {
+			return res.status(400).json({errCode:11,err:"invalid elements"});
 		}
 		const created = await groupMapper.createGroup(name, req.userToken.id);
 
@@ -92,6 +96,9 @@ exports.updateGroup = async function(req, res) {
 		const {name} = req.body;
 		if (!name) {
 			return res.status(400).json({errCode:10,err:"missing fields"});
+		}
+		if (!fieldCheck(name)) {
+			return res.status(400).json({errCode:11,err:"invalid elements"});
 		}
 		const updated = await groupMapper.updateGroup(req.params.id, name, req.userToken.id);
 		res.status(200).json(updated);

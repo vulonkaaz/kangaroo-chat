@@ -40,6 +40,7 @@ Réponses possibles:
 | code | réponse                                           |
 |------+---------------------------------------------------|
 |  400 | err 10:'missing fields'                           |
+|  400 | err 11:"invalid elements"                         |
 |  201 | {"user":{utilisateur créé}, "token": "token JWT"} |
 
 * profils utilisateur
@@ -94,21 +95,23 @@ Contenu attendu:
 Il n'est pas necessaire de remplir tous les champs, seuls les champs défini seront modifié en BDD (/!\ de part le fonctionnement de cette route il est impossible de remettre un champ à null ou à "" si il est défini, pour celà il faut utiliser PUT)
 
 Réponses possibles:
-| code | réponse                 |
-|------+-------------------------|
-|  400 | err 13:"already exist"  |
-|  200 | {user}                  |
+| code | réponse                  |
+|------+--------------------------|
+|  400 | err 11:"invalid elements |
+|  400 | err 13:"already exist"   |
+|  200 | {user}                   |
 
 ~PUT /api/user/me~
 
 fonctionne comme patch à la différence qu'il modifie tous les champs, les champs non définis seront remis à null
 
 Réponses possibles:
-| code | réponse                 |
-|------+-------------------------|
-|  400 | err 10:"missing fields" |
-|  400 | err 13:"already exist"  |
-|  200 | {user}                  |
+| code | réponse                  |
+|------+--------------------------|
+|  400 | err 10:"missing fields"  |
+|  400 | err 11:"invalid elements |
+|  400 | err 13:"already exist"   |
+|  200 | {user}                   |
 
 ** modifier son avatar
 
@@ -163,11 +166,12 @@ Contenu attendu:
 #+end_src
 
 Réponses possibles:
-| code | réponse                 |
-|------+-------------------------|
-|  400 | err 10:"missing fields" |
-|  400 | err 13:"already exist"  |
-|  201 | {groupe créé}           |
+| code | réponse                   |
+|------+---------------------------|
+|  400 | err 10:"missing fields"   |
+|  400 | err 11:"invalid elements" |
+|  400 | err 13:"already exist"    |
+|  201 | {groupe créé}             |
 
 à faire: définir l'erreur si un groupe du même nom est créé (pour l'instant ça renvoie une erreur 500)
 
@@ -241,6 +245,7 @@ Contenu attendu:
 Réponses possibles:
 | code | réponse                    |
 |------+----------------------------|
+|  400 | err 11:"invalid elements"  |
 |  400 | err 13:"already exist"     |
 |  403 | err 21:"not enough rights" |
 |  200 | {group}                    |
@@ -275,6 +280,7 @@ Réponses possibles:
 |------+----------------------------|
 |  404 | err 20:"not found"         |
 |  403 | err 21:"not enough rights" |
+|  400 | err 11:"invalid elements"  |
 |  400 | err 13:"already exist"     |
 |  201 | {channel}                  |
 
@@ -312,6 +318,7 @@ Contenu attendu:
 Réponses possibles:
 | code | réponse                    |
 |------+----------------------------|
+|  400 | err 11:"invalid elements"  |
 |  400 | err 13:"already exist"     |
 |  403 | err 21:"not enough rights" |
 |  200 | {channel}                  |
