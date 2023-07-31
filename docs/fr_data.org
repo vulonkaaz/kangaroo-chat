@@ -21,6 +21,8 @@
 | location      | text        |                                          | localisation à afficher                                          |
 | website       | text        |                                          | site web de l'utilisateur à afficher sur le profil               |
 | contact_email | text        |                                          | email à afficher sur le profil de l'utilisateur                  |
+| invited_by    | int         | REFERENCES "invite_key"(id)              | indique quel clé d'invitation a servi à créer le compte          |
+| site_admin    | bool        | NOT NULL DEFAULT false                   | détermine si l'utilisateur a accès à l'interface admin           |
 | created_at    | timestamptz | NOT NULL DEFAULT now()                   | date/heure de création                                           |
 | updated_at    | timestamptz |                                          | date/heure de mise à jour                                        |
 
@@ -209,5 +211,5 @@ dans la BDD:
 |-----------+------+------------------------------------------+-----------------------------------------------------|
 | id        | int  | GENERATED ALWAYS AS IDENTITY PRIMARY KEY | id                                                  |
 | issuer_id | int  | NOT NULL REFERENCES "user"("id")         | id de l'admin qui a créé la clé                     |
-| user_id   | int  | REFERENCES "user"("id")                  | id de l'utilisateur créé                            |
 | key       | text | NOT NULL UNIQUE                          | clé unique (longue chaîne de caractères aléatoires) |
+| valid     | bool | NOT NULL DEFAULT true                    | si false la clé est désactivée                      |

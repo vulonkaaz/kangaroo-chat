@@ -2,3 +2,4 @@
 %project=kangaroo
 
 init 2023-07-12T13:40:48Z Brice Tonon <btonon arobase gmx point fr> # initial tables
+userinvitedby 2023-07-31T08:24:23Z Brice Tonon <btonon arobase gmx point fr> # move the FK between user and invites from the invite to the user (allow for invite keys that are linked to multiple users)
