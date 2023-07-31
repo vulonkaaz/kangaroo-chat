@@ -20,3 +20,17 @@ exports.make = async function(req, res) {
 		console.log(err);
 	}
 }
+
+exports.update = async function(req, res) {
+	try {
+		const {valid} = req.body;
+		if (typeof valid != 'boolean') {
+			return res.status(400).json({errCode:11,err:"invalid elements"});
+		}
+		const updated = await invMapper.changeValidity(req.params.id, valid);
+		res.status(200).json(updated);
+	} catch (err) {
+		res.status(500).json({errCode:0,err:"server error"});
+		console.log(err);
+	}
+}

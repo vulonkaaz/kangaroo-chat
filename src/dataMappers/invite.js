@@ -16,3 +16,11 @@ exports.makeNew = async function(creatorId) {
 	);
 	return newKey.rows[0];
 }
+
+exports.changeValidity = async function(id, valid) {
+	const updated = await database.query(
+		'UPDATE "invite_key" SET valid = $1, updated_at = NOW() WHERE id = $2 RETURNING *',
+		[valid, id]
+	);
+	return updated.rows[0];
+}

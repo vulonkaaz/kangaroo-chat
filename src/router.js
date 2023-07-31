@@ -44,7 +44,8 @@ router.delete('/api/channel/:id(\\d+)', verify, chanCtrl.deleteChannel);
 router.get ('/api/channel/:id(\\d+)/message', verify, msgCtrl.getMessages);
 router.post('/api/upload', verify, upload.single("file"), msgCtrl.upload, upldErrHandler);
 
-router.get ('/api/invite', verify, adminCheck, invCtrl.getAll);
-router.post('/api/invite', verify, adminCheck, invCtrl.make);
+router.get  ('/api/invite', verify, adminCheck, invCtrl.getAll);
+router.post ('/api/invite', verify, adminCheck, invCtrl.make);
+router.patch('/api/invite/:id(\\d+)', verify, adminCheck, invCtrl.update);
 
 module.exports = router;
