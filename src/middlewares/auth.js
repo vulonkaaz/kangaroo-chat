@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const {isAdmin} = require("../dataMappers/user");
 
 exports.makeToken = function(obj) {
 	return jwt.sign(obj, process.env.TOKEN_SECRET, { expiresIn: '3 days' });
@@ -38,4 +39,17 @@ exports.socketVerify = function (socket, next) {
 			next();
 		}
 	});
+}
+
+exports.adminCheck = async function (req, res, next) {
+	try {
+		if (await isAdmin(req.userToken.id)) {
+			next();
+		} else {
+			res.status(403).json({errCode:21,err:"not enough rights"});
+		}
+	} catch (err) {
+		res.status(500).json({errCode:0,err:"server error"});
+		console.log(err);
+	}
 }

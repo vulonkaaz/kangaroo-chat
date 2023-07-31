@@ -107,3 +107,8 @@ exports.delete = async function(id) {
 	await database.query('DELETE FROM "user_channel" WHERE user_id=$1', [id]);
 	await database.query('DELETE FROM "user" WHERE id=$1', [id]);
 }
+
+exports.isAdmin = async function(id) {
+	const value = await database.query('SELECT "site_admin" FROM "user" WHERE id=$1', [id]);
+	return value.rows[0].site_admin;
+}

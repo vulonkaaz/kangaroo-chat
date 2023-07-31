@@ -5,7 +5,8 @@ const userCtrl = require('./controllers/user');
 const groupCtrl = require('./controllers/group');
 const chanCtrl = require('./controllers/channel');
 const msgCtrl = require('./controllers/message');
-const { verify } = require("./middlewares/auth");
+const invCtrl = require('./controllers/invite');
+const { verify, adminCheck } = require("./middlewares/auth");
 const { fileCheck, errHandler: upldErrHandler } = require("./middlewares/upload");
 const multer  = require('multer');
 const upload = multer({ 
@@ -42,5 +43,8 @@ router.delete('/api/channel/:id(\\d+)', verify, chanCtrl.deleteChannel);
 
 router.get ('/api/channel/:id(\\d+)/message', verify, msgCtrl.getMessages);
 router.post('/api/upload', verify, upload.single("file"), msgCtrl.upload, upldErrHandler);
+
+router.get ('/api/invite', verify, adminCheck, invCtrl.getAll);
+router.post('/api/invite', verify, adminCheck, invCtrl.make);
 
 module.exports = router;
