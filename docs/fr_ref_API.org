@@ -366,3 +366,45 @@ Réponses possibles:
 |  400 | err 31:"bad file"         |
 |  400 | err 32:"file too large"   |
 |  200 | {filename:nom du fichier} |
+
+* Clés d'invitations
+
+Chaque route de cette section sert à la gestion des liens d'invitation, l'accès est reservé aux administrateurs du site défini par le champ site_admin de la table user en BDD
+
+** Créer une clé
+
+~POST /api/invite~
+
+Réponses possibles:
+| code | réponse                    |
+|------+----------------------------|
+|  403 | err 21:"not enough rights" |
+|  201 | {clé}                      |
+
+** Récupérer toutes les clés
+
+~GET /api/invite~
+
+Réponses possibles:
+| code | réponse                    |
+|------+----------------------------|
+|  403 | err 21:"not enough rights" |
+|  200 | [{clé}]                    |
+
+** Activer/Désactiver une clé
+
+~PATCH /api/invite/:id~
+
+Contenu attendu:
+#+begin_src js
+{
+	"valid":true/false
+}
+#+end_src
+
+Réponses possibles:
+| code | réponse                    |
+|------+----------------------------|
+|  403 | err 21:"not enough rights" |
+|  400 | err 11:"invalid elements"  |
+|  201 | {clé}                      |
