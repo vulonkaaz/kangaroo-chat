@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const userMapper = require("../dataMappers/user");
 const { makeToken } = require("../middlewares/auth");
 const { mailCheck, handleCheck, fieldCheck } = require("../middlewares/regex");
+const { checkKey } = require("../dataMappers/invite");
 
 exports.login = async function(req, res) {
 	try {
@@ -23,8 +24,12 @@ exports.login = async function(req, res) {
 
 exports.signup = async function(req, res) {
 	try {
-		const { email, password, name, fullname } = req.body;
+		const { email, password, name, fullname, key } = req.body;
 
+		const invitedBy = await checkKey(key);
+		if (!invitedBy) {
+			return res.status(403).json({errCode:14,err:"invalid invite key"});
+		}
 		if (!email || !password || !name || !fullname) {
 			return res.status(400).json({errCode:10,err:"missing fields"});
 		}
@@ -32,7 +37,7 @@ exports.signup = async function(req, res) {
 			return res.status(400).json({errCode:11,err:"invalid elements"});
 		}
 		const hash = await bcrypt.hash(password, 10);
-		const created = await userMapper.create(email, hash, name, fullname);
+		const created = await userMapper.create(email, hash, name, fullname, invitedBy.id);
 		if(!created) {
 			return res.status(500).json({errCode:0,err:"server error"});
 		}

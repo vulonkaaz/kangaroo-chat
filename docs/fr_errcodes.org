@@ -19,6 +19,7 @@ Chaque erreur de l'API renvoie un JSON d'erreur sous cette forme:
 |      11 | "invalid elements" des éléments du formulaire ne correspondent pas à ce qui est attendu |
 |      12 | "bad login" email ou mot de passe incorrect                                             |
 |      13 | "already exist" l'élément créé a le même nom qu'un élément déjà existant                |
+|      14 | "invalid invite key" la clé d'invitation est invalide                                   |
 |      20 | "not found"                                                                             |
 |      21 | "not enough rights"                                                                     |
 |      22 | "creator can't leave" le créateur d'un groupe ne peut pas le quitter                    |

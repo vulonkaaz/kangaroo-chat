@@ -7,9 +7,9 @@ exports.login = async function(email) {
 	return result.rows[0];
 }
 
-exports.create = async function(email, password, name, fullname) {
-	const query = 'INSERT INTO "user" (email, pass, name, full_name) VALUES ($1,$2,$3,$4) RETURNING id, email, name, full_name';
-	const result = await database.query(query, [email, password, name, fullname]);
+exports.create = async function(email, password, name, fullname, keyId) {
+	const query = 'INSERT INTO "user" (email, pass, name, full_name, invited_by) VALUES ($1,$2,$3,$4,$5) RETURNING id, email, name, full_name';
+	const result = await database.query(query, [email, password, name, fullname, keyId]);
 
 	return result.rows[0];
 }

@@ -24,3 +24,10 @@ exports.changeValidity = async function(id, valid) {
 	);
 	return updated.rows[0];
 }
+
+exports.checkKey = async function(string) {
+	const key = await database.query(
+		'SELECT id FROM "invite_key" WHERE key = $1 AND valid', [string]
+	);
+	return key.rows[0];
+}

@@ -32,7 +32,8 @@ Contenu attendu:
 	"email":"email utilisateur",
 	"password":"mot de passe",
 	"name": "nom d'utilisateur",
-	"fullname": "nom complet"
+	"fullname": "nom complet",
+	"key": "clé d'invitation"
 }
 #+end_src
 
@@ -41,6 +42,7 @@ Réponses possibles:
 |------+---------------------------------------------------|
 |  400 | err 10:'missing fields'                           |
 |  400 | err 11:"invalid elements"                         |
+|  403 | err 14:"invalid invite key"                       |
 |  201 | {"user":{utilisateur créé}, "token": "token JWT"} |
 
 * profils utilisateur
