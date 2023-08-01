@@ -15,7 +15,7 @@ exports.login = async function(req, res) {
 		if (! await bcrypt.compare(password, user.pass) ) {
 			return res.status(401).json({errCode:12,err:"bad login"});
 		}
-		res.json({token:makeToken({id:user.id}), name:user.name, fullname:user.full_name, picture:user.picture});
+		res.json({token:makeToken({id:user.id}), name:user.name, fullname:user.full_name, picture:user.picture, site_admin:user.site_admin});
 	} catch (err) {
 		res.status(500).json({errCode:0,err:"server error"});
 		console.log(err);

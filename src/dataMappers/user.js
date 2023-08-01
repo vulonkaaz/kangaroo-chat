@@ -1,7 +1,7 @@
 const database = require('../database');
 
 exports.login = async function(email) {
-	const query = 'SELECT id, name, full_name, picture, pass FROM "user" WHERE email=$1';
+	const query = 'SELECT id, name, full_name, picture, pass, site_admin FROM "user" WHERE email=$1';
 	const result = await database.query(query, [email]);
 
 	return result.rows[0];
@@ -21,7 +21,7 @@ exports.getPassword = async function(id) {
 
 exports.getProfile = async function(id) {
 	const query = 'SELECT id, email, name, full_name, picture, phone, title, position, department, status, location, \
-	               website, contact_email \
+	               website, contact_email, site_admin \
 	               FROM "user" WHERE id=$1';
 	const result = await database.query(query, [id]);
 
