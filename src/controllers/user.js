@@ -73,13 +73,13 @@ exports.changeMyProfile = async function(req, res) {
 exports.rewriteMyProfile = async function(req, res) {
 	try {
 		const {name, full_name, phone, title, position, department, status, location, website, contact_email} = req.body;
-		if (!mailCheck(contact_email) || contact_email.length > 50) {
+		if (!!contact_email && (!mailCheck(contact_email) || contact_email.length > 50)) {
 			return res.status(400).json({errCode:11,err:"invalid elements"});
 		}
 		if (!handleCheck(name)) {
 			return res.status(400).json({errCode:11,err:"invalid elements"});
 		}
-		if ( fieldCheck(full_name)
+		if ( !fieldCheck(full_name)
 			|| (!!phone && !fieldCheck(phone))
 			|| (!!title && !fieldCheck(title))
 			|| (!!position && !fieldCheck(position))
