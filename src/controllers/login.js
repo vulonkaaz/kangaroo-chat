@@ -44,6 +44,9 @@ exports.signup = async function(req, res) {
 
 		res.status(201).json({user:created,token:makeToken({id:created.id})});
 	} catch (err) {
+		if(err.code=="23505") { //postgres code for unique key violation
+			return res.status(400).json({errCode:13,err:"already exist"});
+		}
 		res.status(500).json({errCode:0,err:"server error"});
 		console.log(err);
 	}
