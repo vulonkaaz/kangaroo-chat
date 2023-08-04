@@ -134,7 +134,6 @@ Réponses possibles:
 |  400 | err 32:"file too large" |
 |  200 | {user}                  |
 
-
 ** supprimer son profil
 
 ~DELETE /api/user/me~
@@ -147,6 +146,27 @@ Contenu attendu:
 #+end_src
 
 Cette route supprime le compte de l'utilisateur, le mot de passe est attendu en plus du token par mesure de sécurité
+
+Réponses possibles:
+| code | réponse                 |
+|------+-------------------------|
+|  400 | err 10:"missing fields" |
+|  401 | err 12:"bad login"      |
+|  204 |                         |
+
+** changer son mot de passe
+
+~POST /api/user/me/password~
+
+Contenu attendu:
+#+begin_src js
+{
+	"currentPassword"
+	"newPassword"
+}
+#+end_src
+
+Cette route permet de changer le mot de passe utilisateur, currentPassword est le mot de passe actuel (redemandé pour question de sécurité) et newPassword le nouveau mot de passe souhaité
 
 Réponses possibles:
 | code | réponse                 |

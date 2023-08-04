@@ -25,6 +25,7 @@ router.patch ("/api/user/me", verify, userCtrl.changeMyProfile);
 router.put   ("/api/user/me", verify, userCtrl.rewriteMyProfile);
 router.delete("/api/user/me", verify, loginCtrl.delete);
 router.post  ("/api/user/me/avatar", verify, upload.single("file"), userCtrl.avatarUpload, upldErrHandler);
+router.post  ("/api/user/me/password", verify, loginCtrl.changePassword);
 
 router.post  ("/api/group", verify, groupCtrl.createGroup);
 router.get   ("/api/group/joined", verify, groupCtrl.listJoined);

@@ -72,3 +72,25 @@ exports.delete = async function(req, res) {
 		console.log(err);
 	}
 }
+
+exports.changePassword = async function(req, res) {
+	try {
+		const {currentPassword, newPassword} = req.body;
+		if (!currentPassword || !newPassword) {
+			return res.status(400).json({errCode:10,err:"missing fields"});
+		}
+		const userPass = await userMapper.getPassword(req.userToken.id);
+		if (!userPass) {
+			return res.status(401).json({errCode:12,err:"bad login"});
+		}
+		if (! await bcrypt.compare(currentPassword, userPass) ) {
+			return res.status(401).json({errCode:12,err:"bad login"});
+		}
+		const hash = await bcrypt.hash(newPassword, 10);
+		await userMapper.changePassword(req.userToken.id, hash);
+		res.status(204).send();
+	} catch (err) {
+		res.status(500).json({errCode:0,err:"server error"});
+		console.log(err);
+	}
+}
